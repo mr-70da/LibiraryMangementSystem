@@ -5,11 +5,11 @@ namespace LibraryManagementSystem.Models;
 
 public partial class Author
 {
-    public int AuthorId { get; }
+    public int Id { get; set; }
 
-    public string AuthorFname { get; set; } = null!;
+    public string FirstName { get; set; } = null!;
 
-    public string? AuthorLname { get; set; }
+    public string? LastName { get; set; }
 
-    public virtual ICollection<Book> BookIsbns { get; } = new List<Book>();
+    public virtual ICollection<Book> BookIsbns { get; set; } = new List<Book>();
 }

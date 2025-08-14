@@ -5,15 +5,15 @@ namespace LibraryManagementSystem.Models;
 
 public partial class Book
 {
-    public int BookIsbn { get; }
+    public int Isbn { get; set; }
 
-    public string BookTitle { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
-    public int BookEdition { get; set; }
+    public int Edition { get; set; }
 
-    public short? BookCopyRight { get; set; }
+    public short? CopyRightYear { get; set; }
 
     public decimal Price { get; set; }
 
-    public virtual ICollection<Author> Authors { get; } = new List<Author>();
+    public virtual ICollection<Author> Authors { get; set; } = new List<Author>();
 }

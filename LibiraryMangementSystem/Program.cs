@@ -6,8 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<LibiraryContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Server=DESKTOP-HKCKHUN;Database=Libirary;Trusted_Connection=True;TrustServerCertificate=True;")));
+builder.Services.AddDbContext<LibraryContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Server=.;Database=Library;Trusted_Connection=True;TrustServerCertificate=True;")));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

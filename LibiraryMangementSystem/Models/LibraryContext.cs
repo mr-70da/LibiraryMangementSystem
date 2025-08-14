@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementSystem.Models;
 
-public partial class LibiraryContext : DbContext
+public partial class LibraryContext : DbContext
 {
-    public LibiraryContext()
+    public LibraryContext()
     {
     }
 
-    public LibiraryContext(DbContextOptions<LibiraryContext> options)
+    public LibraryContext(DbContextOptions<LibraryContext> options)
         : base(options)
     {
     }
@@ -21,25 +21,22 @@ public partial class LibiraryContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-HKCKHUN;Database=Libirary;Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=.;Database=Library;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Author>(entity =>
         {
-            entity.HasKey(e => e.AuthorId).HasName("PK__Author__86516BCF05B27966");
+            entity.HasKey(e => e.Id).HasName("PK__Author__3214EC07C6735B95");
 
             entity.ToTable("Author");
 
-            entity.Property(e => e.AuthorId).HasColumnName("author_id");
-            entity.Property(e => e.AuthorFname)
+            entity.Property(e => e.FirstName)
                 .HasMaxLength(25)
-                .IsUnicode(false)
-                .HasColumnName("author_fname");
-            entity.Property(e => e.AuthorLname)
+                .IsUnicode(false);
+            entity.Property(e => e.LastName)
                 .HasMaxLength(25)
-                .IsUnicode(false)
-                .HasColumnName("author_lname");
+                .IsUnicode(false);
 
             entity.HasMany(d => d.BookIsbns).WithMany(p => p.Authors)
                 .UsingEntity<Dictionary<string, object>>(
@@ -47,14 +44,14 @@ public partial class LibiraryContext : DbContext
                     r => r.HasOne<Book>().WithMany()
                         .HasForeignKey("BookIsbn")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Authors_o__book___6383C8BA"),
+                        .HasConstraintName("FK__Authors_o__book___4F7CD00D"),
                     l => l.HasOne<Author>().WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Authors_o__autho__628FA481"),
+                        .HasConstraintName("FK__Authors_o__autho__4E88ABD4"),
                     j =>
                     {
-                        j.HasKey("AuthorId", "BookIsbn").HasName("PK__Authors___62D322507D82B4C8");
+                        j.HasKey("AuthorId", "BookIsbn").HasName("PK__Authors___62D32250ACCF2237");
                         j.ToTable("Authors_of_books");
                         j.IndexerProperty<int>("AuthorId").HasColumnName("author_id");
                         j.IndexerProperty<int>("BookIsbn").HasColumnName("book_isbn");
@@ -63,18 +60,12 @@ public partial class LibiraryContext : DbContext
 
         modelBuilder.Entity<Book>(entity =>
         {
-            entity.HasKey(e => e.BookIsbn).HasName("PK__Books__482499FF08EA90F6");
+            entity.HasKey(e => e.Isbn).HasName("PK__Books__9271CED1FA967165");
 
-            entity.Property(e => e.BookIsbn).HasColumnName("book_isbn");
-            entity.Property(e => e.BookCopyRight).HasColumnName("book_copy_right");
-            entity.Property(e => e.BookEdition).HasColumnName("book_edition");
-            entity.Property(e => e.BookTitle)
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Title)
                 .HasMaxLength(150)
-                .IsUnicode(false)
-                .HasColumnName("book_title");
-            entity.Property(e => e.Price)
-                .HasColumnType("decimal(18, 0)")
-                .HasColumnName("price");
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);
