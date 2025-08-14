@@ -1,6 +1,9 @@
 ﻿using LibraryManagementSystem.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using LibraryManagementSystem.Data;
+using LibraryManagementSystem.Dtos.Book;
+using LibraryManagementSystem.Services;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -8,72 +11,29 @@ namespace LibraryManagementSystem.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        LibraryContext _libraryContext;
-        public BookController(LibraryContext context)
+        private readonly IBookService _bookService;
+        public BookController(IBookService service)
         {
-            _libraryContext = context;
+            _bookService= service;
         }
 
         [HttpGet("byAuther/{authorId}")]
         public IActionResult GetAll(int authorId)
         {
-            var booksByAuthor = _libraryContext.Books
-                               .Where(b => b.Authors.Any(a => a.Id == authorId))
-                               .Select(b => new
-                               {
-                                   b.Isbn,
-                                   b.Title,
-                                   b.Edition,
-                                   b.Price,
-
-                               })
-                               .ToList();
-
-            var result = new
-            {
-                AuthorId = authorId,
-                TotalBooks = booksByAuthor.Count,
-                Books = booksByAuthor
-            };
-
-            return Ok(result);
+            _bookService.GetAllByAuthor(authorId);
+            return Ok();
         }
         //create new book with author
         [HttpPost("{authorId}")]
-        public IActionResult Create(int authorId, [FromBody] Book newBook)
+        public IActionResult Create(int authorId, [FromBody] BookCreateDto newBook)
         {
-            if (newBook == null)
-                return BadRequest("Invalid book data.");
-
-
-            Author author = _libraryContext.Authors.Find(authorId);
-
-            if (author == null)
-                return BadRequest("Author not found.");
-
-            author.BookIsbns.Add(newBook);
-
-            _libraryContext.SaveChanges();
-
+            _bookService.Create(authorId, newBook);
             return Ok("Created!");
         }
         [HttpPut("{bookIsbn}")]
-        public IActionResult Update(int bookIsbn, [FromBody] Book updatedBook)
+        public IActionResult Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
         {
-            if (updatedBook == null)
-            {
-                return BadRequest("Invalid Book data.");
-            }
-            Book existingBook = _libraryContext.Books.Find(bookIsbn);
-            if (existingBook == null)
-            {
-                return BadRequest("Book not found!");
-            }
-            existingBook.Title = updatedBook.Title;
-            existingBook.Price = updatedBook.Price;
-            existingBook.CopyRightYear = updatedBook.CopyRightYear;
-            existingBook.Edition = updatedBook.Edition;
-            _libraryContext.SaveChanges();
+            _bookService.Update(bookIsbn, updatedBook);
             return Ok("Updated!");
 
         }

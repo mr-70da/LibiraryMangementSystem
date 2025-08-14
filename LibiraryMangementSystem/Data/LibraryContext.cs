@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using LibraryManagementSystem.Models;
 
-namespace LibraryManagementSystem.Models;
+namespace LibraryManagementSystem.Data;
 
 public partial class LibraryContext : DbContext
 {
