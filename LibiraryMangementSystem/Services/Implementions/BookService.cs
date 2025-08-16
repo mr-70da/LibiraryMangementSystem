@@ -30,11 +30,12 @@ namespace LibraryManagementSystem.Services
             _unitOfWork.Complete();
         }
 
-        public IEnumerable<BookReadDto> GetAllByAuthor(int authorId)
+        public BooksByAuthorDto GetAllByAuthor(int authorId)
         {
             var books = _unitOfWork.Books.GetByAuthor(authorId);
-            return _mapper.Map<IEnumerable<BookReadDto>>(books);
-
+            var bookCreateDtos = _mapper.Map<List<BookCreateDto>>(books);
+            var booksByAuthorDto = new BooksByAuthorDto(authorId, bookCreateDtos, bookCreateDtos.Count);    
+            return booksByAuthorDto;
         }
 
         public void Update(int id , BookCreateDto newBookDto)

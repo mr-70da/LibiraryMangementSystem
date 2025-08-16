@@ -18,10 +18,12 @@ namespace LibraryManagementSystem.Repositories
         public void Update(int id, Author updatedAuthor)
         {
             var existingAuthor = LibraryContext.Authors.Find(id);
-            updatedAuthor.Id = existingAuthor.Id; // Ensure the ID remains the same
-            existingAuthor = updatedAuthor;
-           
-            LibraryContext.Authors.Update(existingAuthor);
+            updatedAuthor.Id = existingAuthor.Id;
+            if (existingAuthor == null)
+                throw new InvalidOperationException($"Author with id {id} not found.");
+
+            LibraryContext.Entry(existingAuthor).CurrentValues.SetValues(updatedAuthor);
+
             LibraryContext.SaveChanges();
             
         }

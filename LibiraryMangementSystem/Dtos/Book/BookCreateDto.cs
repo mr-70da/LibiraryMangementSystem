@@ -8,7 +8,6 @@
         public short? CopyRightYear { get; set; }
         public decimal Price { get; set; }
 
-       
-        public List<int> AuthorIds { get; set; } = new();
+         
     }
 }

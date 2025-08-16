@@ -20,8 +20,8 @@ namespace LibraryManagementSystem.Controllers
         [HttpGet("byAuther/{authorId}")]
         public IActionResult GetAll(int authorId)
         {
-            _bookService.GetAllByAuthor(authorId);
-            return Ok();
+            return Ok(_bookService.GetAllByAuthor(authorId));
+            
         }
         //create new book with author
         [HttpPost("{authorId}")]

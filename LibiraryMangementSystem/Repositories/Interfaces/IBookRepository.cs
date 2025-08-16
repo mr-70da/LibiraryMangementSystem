@@ -5,7 +5,7 @@ namespace LibraryManagementSystem.Repositories
 {
     public interface IBookRepository : IRepository<Book>
     {
-        IEnumerable<Book> GetByAuthor(int authorId);
+        List<Book> GetByAuthor(int authorId);
         Book GetByIsbn(string isbn);
         void Update(int id ,Book book);
         void Create(Author auther, Book book);

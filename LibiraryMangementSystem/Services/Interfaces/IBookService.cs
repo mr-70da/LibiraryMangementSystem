@@ -8,6 +8,6 @@ namespace LibraryManagementSystem.Services
         public void Update(int id, BookCreateDto UpdatedBook);
         public void Delete(int id);
         public void Create(int autherId, BookCreateDto bookDto);
-        public IEnumerable<BookReadDto> GetAllByAuthor(int authorId);
+        public BooksByAuthorDto GetAllByAuthor(int authorId);
     }
 }

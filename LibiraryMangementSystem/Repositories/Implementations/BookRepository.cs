@@ -2,6 +2,7 @@
 using LibraryManagementSystem.Dtos.Book;
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Repositories.Implementation;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace LibraryManagementSystem.Repositories
 {
@@ -15,20 +16,21 @@ namespace LibraryManagementSystem.Repositories
             return LibraryContext.Books.Find(isbn);
         }
 
-        public IEnumerable<Book> GetByAuthor(int authorId)
+        public List<Book> GetByAuthor(int authorId)
         {
-            return LibraryContext.Books
-                .Where(b => b.Authors.Any(a => a.Id == authorId))
-                .ToList();
+            List<Book> returnedBooks = LibraryContext.Books
+                .Where(b => b.Authors.Any(a => a.Id == authorId)).ToList();
+           
             
+            return returnedBooks;
         }
 
         public void Update(int id, Book updatedBook)
         {
             var book = LibraryContext.Books.Find(id);
             updatedBook.Isbn = book.Isbn; // Ensure the ISBN remains the same
-            book = updatedBook;
-            LibraryContext.Books.Update(book);
+            LibraryContext.Entry(book).CurrentValues.SetValues(updatedBook);
+
             LibraryContext.SaveChanges();
 
         }
