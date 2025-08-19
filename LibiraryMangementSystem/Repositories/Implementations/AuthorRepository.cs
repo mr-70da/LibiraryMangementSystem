@@ -4,7 +4,7 @@ using LibraryManagementSystem.Repositories.Implementation;
 
 namespace LibraryManagementSystem.Repositories
 {
-    public class AuthorRepository : Repository<Author>, IAuthorRepository
+    public class AuthorRepository : GenricRepository<Author>, IAuthorRepository
     {
         public AuthorRepository(LibraryContext context) : base(context)
         {

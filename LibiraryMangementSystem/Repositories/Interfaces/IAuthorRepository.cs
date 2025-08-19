@@ -2,7 +2,7 @@
 using LibraryManagementSystem.Models;
 namespace LibraryManagementSystem.Repositories
 {
-    public interface IAuthorRepository : IRepository<Author>
+    public interface IAuthorRepository : IGenricRepository<Author>
     {
         Author Get(int id);
         void Update(int id, Author updatedAuthor);

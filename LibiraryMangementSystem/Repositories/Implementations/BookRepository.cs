@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace LibraryManagementSystem.Repositories
 {
-    public class BookRepository : Repository<Book>, IBookRepository
+    public class BookRepository : GenricRepository<Book>, IBookRepository
     {
         public BookRepository(LibraryContext context) : base(context)
         {

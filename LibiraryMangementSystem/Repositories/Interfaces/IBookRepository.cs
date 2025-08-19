@@ -3,7 +3,7 @@ using LibraryManagementSystem.Models;
 
 namespace LibraryManagementSystem.Repositories
 {
-    public interface IBookRepository : IRepository<Book>
+    public interface IBookRepository : IGenricRepository<Book>
     {
         List<Book> GetByAuthor(int authorId);
         Book GetByIsbn(string isbn);
