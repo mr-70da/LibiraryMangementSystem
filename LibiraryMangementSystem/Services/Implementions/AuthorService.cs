@@ -17,7 +17,7 @@ namespace LibraryManagementSystem.Services
         }
 
         
-
+        //Checked
         public void Create(AuthorCreateDto dto)
         {
             var author = _mapper.Map<Author>(dto);
@@ -25,26 +25,27 @@ namespace LibraryManagementSystem.Services
             _unitOfWork.Complete();
             
         }
-
-        public void Delete(int  id)
+        //Checked
+        public void Delete(int id)
         {
-            var author = _unitOfWork.Authors.Get(id);
+            var author = _unitOfWork.Authors.GetById(id);
             _unitOfWork.Authors.Remove(author);
             _unitOfWork.Complete();
 
         }
 
-        
+        //Checked
         public AuthorReadDto Get(int id)
         {
-            return _mapper.Map<AuthorReadDto>(_unitOfWork.Authors.Get(id));
+            return _mapper.Map<AuthorReadDto>(_unitOfWork.Authors.GetById(id));
         }
-
+        //Checked
         public void Update(int id, AuthorCreateDto dto)
         {
-            var author = _unitOfWork.Authors.Get(id);
-            var updatedAuthor = _mapper.Map<Author>(dto);
-            _unitOfWork.Authors.Update(id,updatedAuthor);
+            
+            Author updatedAuthor = _mapper.Map<Author>(dto);
+            updatedAuthor.Id = id;
+            _unitOfWork.Authors.Update(updatedAuthor);
             _unitOfWork.Complete();
         }
     }

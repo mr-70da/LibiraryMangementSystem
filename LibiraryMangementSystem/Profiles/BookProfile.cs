@@ -14,6 +14,7 @@ namespace LibraryManagementSystem.Profiles
 
             // Entity -> CreateDto
             CreateMap<Book, BookCreateDto>();
+            CreateMap<Book, BookWithoutAuthorDto>();
 
             // CreateDto -> Entity
             CreateMap<BookCreateDto, Book>();

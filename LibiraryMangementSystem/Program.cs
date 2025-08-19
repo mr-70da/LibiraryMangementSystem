@@ -1,11 +1,17 @@
 using LibraryManagementSystem.Data;
 using LibraryManagementSystem.Profiles;
+using LibraryManagementSystem.Repositories;
+using LibraryManagementSystem.Repositories.Implementation;
 using LibraryManagementSystem.Services;
 using LibraryManagementSystem.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+//Repo
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IBookRepository, BookRepository>();
 //unit of work
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Add services to the container
 builder.Services.AddControllers();

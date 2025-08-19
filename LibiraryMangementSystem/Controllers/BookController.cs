@@ -24,12 +24,14 @@ namespace LibraryManagementSystem.Controllers
             
         }
         //create new book with author
-        [HttpPost("{authorId}")]
-        public IActionResult Create(int authorId, [FromBody] BookCreateDto newBook)
+        //Checked
+        [HttpPost]
+        public IActionResult Create([FromBody] BookCreateDto newBook)
         {
-            _bookService.Create(authorId, newBook);
+            _bookService.Create(newBook);
             return Ok("Created!");
         }
+        //checked
         [HttpPut("{bookIsbn}")]
         public IActionResult Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
         {

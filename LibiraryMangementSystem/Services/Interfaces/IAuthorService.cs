@@ -10,7 +10,7 @@ namespace LibraryManagementSystem.Services
 
         public void Create(AuthorCreateDto dto);
         public AuthorReadDto Get(int id);
-        public void Delete(int dto);
+        public void Delete(int id);
         public void Update(int id,AuthorCreateDto dto);
     }
 }

@@ -1,12 +1,10 @@
 ﻿namespace LibraryManagementSystem.Dtos.Book
 
 {
-    public class BookCreateDto
+    public class BookCreateDto : BookDto
     {
-        public string Title { get; set; }
-        public int Edition { get; set; }
-        public short? CopyRightYear { get; set; }
-        public decimal Price { get; set; }
+        
+        public int AuthorId { get; set; }
 
          
     }

@@ -1,10 +1,12 @@
-﻿using LibraryManagementSystem.Repositories;
+﻿using LibraryManagementSystem.Models;
+using LibraryManagementSystem.Repositories;
+using LibraryManagementSystem.Repositories.Implementation;
 
 namespace LibraryManagementSystem.UnitOfWork
 {
     public interface IUnitOfWork :IDisposable
     {
-        IAuthorRepository Authors { get; }
+        IGenericRepository<Author> Authors { get; }
         IBookRepository Books { get; }
         int Complete();
         

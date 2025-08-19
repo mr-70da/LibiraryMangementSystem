@@ -2,15 +2,15 @@
 {
     public class BooksByAuthorDto
     {
-        public BooksByAuthorDto(int autherId,List<BookCreateDto> bookCreateDtos,int count) {
-            autherId = autherId;
-            Books = bookCreateDtos;
+        public BooksByAuthorDto(int authorId,List<BookWithoutAuthorDto> bookDto,int count){
+            AuthorId = authorId;
+            Books = bookDto;
             BooksCount = count;
 
         }
         public int AuthorId { get; set; }
         public int BooksCount { get; set; }
-        public List<BookCreateDto> Books { get; set; } = new List<BookCreateDto>();
+        public List<BookWithoutAuthorDto> Books { get; set; } = new List<BookWithoutAuthorDto>();
         
     }
 }

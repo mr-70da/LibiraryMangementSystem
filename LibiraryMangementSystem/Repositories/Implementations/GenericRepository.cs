@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 namespace LibraryManagementSystem.Repositories.Implementation
 {
-    public class GenricRepository<TEntity> : IGenricRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        private readonly LibraryContext _context;
+        protected readonly LibraryContext _context;
         private readonly DbSet<TEntity> _dbSet;
-        public GenricRepository(LibraryContext context)
+        public GenericRepository(LibraryContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
@@ -15,7 +15,7 @@ namespace LibraryManagementSystem.Repositories.Implementation
         {
             _dbSet.Add(entity);
         }
-        public List<TEntity> GetAll(Object id)
+        public IEnumerable<TEntity> GetAll()
         {
             
             return _dbSet.ToList();
@@ -26,14 +26,12 @@ namespace LibraryManagementSystem.Repositories.Implementation
             return _dbSet.Find(id);
         }
 
-        public void Remove(Object id)
+        public void Remove(TEntity entity)
         {
-            TEntity entity = _dbSet.Find(id);
             _dbSet.Remove(entity);
 
         }
-
-        public void Update(object id, TEntity entity)
+        public void Update(TEntity entity)
         {
             _dbSet.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;

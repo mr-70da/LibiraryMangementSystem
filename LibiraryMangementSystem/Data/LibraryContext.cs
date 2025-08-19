@@ -52,15 +52,15 @@ public partial class LibraryContext : DbContext
                     {
                         j.HasKey("AuthorId", "BookIsbn").HasName("PK__Authors___62D32250ACCF2237");
                         j.ToTable("Authors_of_books");
-                        j.IndexerProperty<int>("AuthorId").HasColumnName("author_id");
-                        j.IndexerProperty<int>("BookIsbn").HasColumnName("book_isbn");
+                        j.IndexerProperty<int>("AuthorId").HasColumnName("authorId");
+                        j.IndexerProperty<int>("BookIsbn").HasColumnName("bookIsbn");
                     });
         });
 
         modelBuilder.Entity<Book>(entity =>
         {
-            entity.HasKey(e => e.Isbn).HasName("PK__Books__9271CED1FA967165");
-
+            entity.HasKey(e => e.Isbn).HasName("PK__Book__9271CED1FA967165");
+            entity.ToTable("Book");
             entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Title)
                 .HasMaxLength(150)

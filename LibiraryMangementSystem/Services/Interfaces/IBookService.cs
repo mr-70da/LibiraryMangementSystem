@@ -7,7 +7,7 @@ namespace LibraryManagementSystem.Services
     {
         public void Update(int id, BookCreateDto UpdatedBook);
         public void Delete(int id);
-        public void Create(int autherId, BookCreateDto bookDto);
+        public void Create(BookCreateDto bookDto);
         public BooksByAuthorDto GetAllByAuthor(int authorId);
     }
 }
