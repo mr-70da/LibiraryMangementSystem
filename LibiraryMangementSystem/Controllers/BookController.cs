@@ -1,9 +1,6 @@
-﻿using LibraryManagementSystem.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using LibraryManagementSystem.Data;
-using LibraryManagementSystem.Dtos.Book;
-using LibraryManagementSystem.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using LibraryManagementSystem.Domain.Interfaces.Services;
+using LibraryManagementSystem.Application.DTOs;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -39,6 +36,35 @@ namespace LibraryManagementSystem.Controllers
             return Ok("Updated!");
 
         }
+        [HttpDelete]
+        public IActionResult UpdateStatus(int bookIsbn)
+        {
+            
+            return Ok("Book deleted successfully.");
+        }
+        [HttpPut]
+        public IActionResult Borrow(int UserId,int BookIsbn,int BranchId)
+        {
+            
+            return Ok();
+        }
+        [HttpPut]
+        public IActionResult Return(int TransactionId)
+        {
+            
+            return Ok();
+        }
+        [HttpGet]
+        public IActionResult GetMostBorrowed(int listSize)
+        {
+            // Logic to get borrowing history by user ID
+            return Ok("Borrowing history retrieved successfully.");
+        }
+        [HttpGet]
+        public IActionResult GetBooksCountPerBranch()
+        {
+            // Logic to get borrowing history by user ID
+            return Ok("Borrowing history retrieved successfully.");
+        }
 
     }
-}

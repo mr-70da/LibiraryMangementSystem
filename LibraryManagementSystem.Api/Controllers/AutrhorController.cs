@@ -1,5 +1,8 @@
-﻿using LibraryManagementSystem.Application.DTOs;
-using LibraryManagementSystem.Domain.Interfaces.Services;
+﻿using LibraryManagementSystem.Data;
+using LibraryManagementSystem.Dtos.Author;
+using LibraryManagementSystem.Models;
+using LibraryManagementSystem.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementSystem.Controllers

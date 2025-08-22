@@ -1,10 +1,14 @@
-using LibraryManagementSystem.Data;
-using LibraryManagementSystem.Profiles;
-using LibraryManagementSystem.Repositories;
-using LibraryManagementSystem.Repositories.Implementation;
-using LibraryManagementSystem.Services;
-using LibraryManagementSystem.UnitOfWork;
+﻿
+using LibraryManagementSystem.Application.Interfaces.Services;
+using LibraryManagementSystem.Domain.Interfaces.Repositories;
+using LibraryManagementSystem.Domain.Interfaces.Services;
+using LibraryManagementSystem.Domain.UnitOfWork;
+using LibraryManagementSystem.Infrastructure.Data;
+using LibraryManagementSystem.Infrastructure.Repositories;
+using LibraryManagementSystem.Infrastructure.Repositories.Implementation;
+using LibraryManagementSystem.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 //Repo
@@ -16,11 +20,12 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Add services to the container
 builder.Services.AddControllers();
 //add mappers
-builder.Services.AddAutoMapper(typeof(Program));
+// Replace the incorrect AddAutoMapper line with the correct usage
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // services
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddDbContext<LibraryContext>(options =>
+builder.Services.AddDbContext<LibraryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefualtConnection")));
 
 builder.Services.AddEndpointsApiExplorer();
