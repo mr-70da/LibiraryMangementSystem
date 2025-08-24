@@ -46,50 +46,87 @@ CREATE TABLE [User](
 
 
 
-INSERT INTO Author
-VALUES ('Mahmoud','Ayman'),('Mahmoud','Ramadan'),('Ahmad','Ayman'), ('Ali','Ehab');
+-- Insert Authors
+INSERT INTO Author (FirstName, LastName)
+VALUES 
+('George', 'Orwell'),
+('Jane', 'Austen'),
+('Mark', 'Twain'),
+('J.K.', 'Rowling');
 
-INSERT INTO dbo.Book (Title, Edition, CopyRightYear, Price)
+-- Insert Library Branches
+INSERT INTO LibraryBranch (BranchName, [Address], ContactNumber)
+VALUES 
+('Central Library', '123 Main St, Downtown', '123-456-7890'),
+('East Branch', '456 East Ave, Suburb', '987-654-3210'),
+('West Branch', '789 West Blvd, Uptown', '555-111-2222');
+
+-- Insert Users
+INSERT INTO [User] (FirstName, LastName, Email, RegistrationDate)
 VALUES
-('The Pragmatic Programmer', 2, 2019, 42.50),
-('Clean Code', 1, 2008, 37.99),
-('Design Patterns: Elements of Reusable Object-Oriented Software', 1, 1994, 55.00),
-('Introduction to Algorithms', 4, 2022, 88.75),
-('Head First Java', 3, 2017, 32.40),
-('Effective Java', 3, 2018, 40.25),
-('SQL Server Internals', 2, 2016, 47.95),
-('JavaScript: The Good Parts', 1, 2008, 25.50),
-('Python Crash Course', 2, 2019, 29.99),
-('Clean Architecture', 1, 2017, 36.70);
+('Alice', 'Smith', 'alice.smith@example.com', '2022-01-15'),
+('Bob', 'Johnson', 'bob.johnson@example.com', '2022-03-20'),
+('Charlie', 'Brown', 'charlie.brown@example.com', '2023-05-10'),
+('Diana', 'Prince', 'diana.prince@example.com', '2023-07-25');
 
-INSERT INTO Authors_of_books
+-- Insert Books (make sure AuthorId and BranchId exist)
+INSERT INTO Book (AuthorId, BranchId, Title, Edition, CopyRightYear, Price)
 VALUES
-(1,2),
-(1,3),
-(4,6),
-(1,1),
-(4,2),
-(2,4),
-(3,3),
-(1,10),
-(1,9),
-(2,5),
-(3,9),
-(4,8),
-(4,7)
+(1, 1, '1984', 1, 1949, 15.99),
+(2, 2, 'Pride and Prejudice', 3, 1813, 12.50),
+(3, 3, 'Adventures of Huckleberry Finn', 2, 1884, 10.75),
+(4, 1, 'Harry Potter and the Philosopher''s Stone', 1, 1997, 20.00),
+(4, 2, 'Harry Potter and the Chamber of Secrets', 1, 1998, 22.00);
+
+-- Insert Borrowing History (make sure BookId and UserId exist)
+INSERT INTO BorrowingHistory (BookId, UserId, BorrowDate, ReturnDate)
+VALUES
+(5, 4, '2023-05-21', '2023-06-08'),
+(3, 3, '2023-01-16', NULL),
+(1, 3, '2023-04-29', NULL),
+(5, 3, '2023-06-02', '2023-06-09'),
+(4, 1, '2023-06-15', '2023-06-29'),
+(5, 1, '2023-02-27', '2023-03-01'),
+(1, 3, '2023-01-06', '2023-01-15'),
+(3, 4, '2023-02-14', '2023-02-15'),
+(1, 1, '2023-02-28', '2023-03-20'),
+(3, 4, '2023-04-23', '2023-04-29'),
+(2, 2, '2023-02-10', '2023-02-25'),
+(4, 2, '2023-03-05', '2023-03-14'),
+(5, 5, '2023-01-25', NULL),
+(1, 4, '2023-03-30', '2023-04-05'),
+(2, 1, '2023-05-10', '2023-05-18'),
+(3, 2, '2023-04-01', NULL),
+(4, 3, '2023-02-07', '2023-02-21'),
+(2, 5, '2023-06-05', '2023-06-12'),
+(5, 2, '2023-01-18', '2023-01-22'),
+(1, 5, '2023-04-11', '2023-04-25'),
+(3, 1, '2023-05-20', NULL),
+(2, 3, '2023-02-03', '2023-02-10'),
+(4, 4, '2023-01-09', '2023-01-19'),
+(5, 1, '2023-06-01', NULL),
+(1, 2, '2023-03-22', '2023-03-29');
+
+SELECT * FROM Author;
+SELECT * FROM LibraryBranch;
+SELECT * FROM [User];
+SELECT * FROM Book;
+SELECT * FROM BorrowingHistory;
+
+--book with author name and branch name (innerjoin)
+SELECT Title , BranchName ,CONCAT(a.FirstName ,' ', a.LastName) as [Author name]  From Book b , LibraryBranch lb ,Author a
+where b.BranchId = lb.Id AND a.Id = b.AuthorId;
 
 
-DROP TABLE IF EXISTS dbo.Author;
-GO
-DROP TABLE IF EXISTS dbo.Book;
-GO
-DROP TABLE IF EXISTS dbo.Authors_of_books;
-GO
 
+--most borrowed books
+SELECT BookId ,COUNT(BookId) As bookCount
+FROM BorrowingHistory
+GROUP by BookId;
 
-SELECT * FROM Author
-SELECT * FROM Book
-SELECt * FROM Authors_of_books
-
-
+--borrowed book count per branch
+SELECT count(*) as BookCount
+FROM LibraryBranch l, Book b
+Where b.BranchId = l.Id
+Group BY BranchId;
 
