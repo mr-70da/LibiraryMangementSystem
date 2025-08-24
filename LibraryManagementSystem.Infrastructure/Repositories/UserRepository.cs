@@ -2,15 +2,11 @@
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Infrastructure.Data;
 using LibraryManagementSystem.Infrastructure.Repositories.Implementation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementSystem.Infrastructure.Repositories
 {
-    internal class UserRepository : GenericRepository<User>, IUserRepository
+    public class UserRepository : GenericRepository<User>, IUserRepository
     {
         public UserRepository(LibraryDbContext context) : base(context)
         {
@@ -18,9 +14,10 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
 
         public IEnumerable<BorrowingHistory> GetBorrowingHistory(int userId)
         {
-               return _context.BorrowingHistories.
-                Where(bh => bh.UserId == userId)
-                    .ToList();
+            return _context.BorrowingHistories
+                .Where(bh => bh.UserId.HasValue && bh.UserId.Value == userId)
+                .Include(bh => bh.Book)
+                .ToList();
         }
     }
 }

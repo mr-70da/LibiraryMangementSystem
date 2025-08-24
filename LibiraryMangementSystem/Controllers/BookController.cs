@@ -11,14 +11,14 @@ namespace LibraryManagementSystem.Controllers
         private readonly IBookService _bookService;
         public BookController(IBookService service)
         {
-            _bookService= service;
+            _bookService = service;
         }
 
         [HttpGet("byAuther/{authorId}")]
-        public IActionResult GetAll(int authorId)
+        public IActionResult All(int authorId)
         {
             return Ok(_bookService.GetAllByAuthor(authorId));
-            
+
         }
         //create new book with author
         //Checked
@@ -36,22 +36,22 @@ namespace LibraryManagementSystem.Controllers
             return Ok("Updated!");
 
         }
-        [HttpDelete]
+        [HttpPut]
         public IActionResult UpdateStatus(int bookIsbn)
         {
-            
+
             return Ok("Book deleted successfully.");
         }
         [HttpPut]
-        public IActionResult Borrow(int UserId,int BookIsbn,int BranchId)
+        public IActionResult Borrow(int UserId, int BookIsbn, int BranchId)
         {
-            
+
             return Ok();
         }
         [HttpPut]
         public IActionResult Return(int TransactionId)
         {
-            
+
             return Ok();
         }
         [HttpGet]
@@ -68,3 +68,4 @@ namespace LibraryManagementSystem.Controllers
         }
 
     }
+}

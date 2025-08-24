@@ -8,6 +8,7 @@ namespace LibraryManagementSystem.Domain.UnitOfWork
     {
         IGenericRepository<Author> Authors { get; }
         IBookRepository Books { get; }
+        IUserRepository Users { get; }
         int Complete();
         
 

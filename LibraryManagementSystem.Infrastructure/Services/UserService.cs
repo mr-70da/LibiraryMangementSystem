@@ -2,11 +2,12 @@
 using AutoMapper;
 using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Application.Services;
+using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.UnitOfWork;
 
 namespace LibraryManagementSystem.Infrastructure.Services
 {
-    internal class UserService : IUserService
+    public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -18,17 +19,21 @@ namespace LibraryManagementSystem.Infrastructure.Services
 
         public void Create(UserCreateDto userCreateDto)
         {
-            throw new NotImplementedException();
+            
+            _unitOfWork.Users.Add(_mapper.Map<User>(userCreateDto));
+            _unitOfWork.Complete();
         }
 
         public List<UserReadDto> GetAll()
         {
-            throw new NotImplementedException();
+            var users = _unitOfWork.Users.GetAll().ToList();
+            return _mapper.Map<List<UserReadDto>>(users);
         }
 
         public List<UserBorrowingHistoryDto> GetBorrowingHistory(int userId)
         {
-            throw new NotImplementedException();
+            var borrowingHistory = _unitOfWork.Users.GetBorrowingHistory(userId).ToList();
+            return _mapper.Map<List<UserBorrowingHistoryDto>>(borrowingHistory);
         }
     }
 }
