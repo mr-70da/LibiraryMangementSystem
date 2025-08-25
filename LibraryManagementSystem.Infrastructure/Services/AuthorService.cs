@@ -32,6 +32,10 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
         public void Delete(int id)
         {
             var author = _unitOfWork.Authors.GetById(id);
+            if (author == null)
+            {
+                throw new Exception("Author not found");
+            }
             _unitOfWork.Authors.Remove(author);
             _unitOfWork.Complete();
 
@@ -40,12 +44,20 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
         //Checked
         public AuthorReadDto Get(int id)
         {
-            return _mapper.Map<AuthorReadDto>(_unitOfWork.Authors.GetById(id));
+            var author = _unitOfWork.Authors.GetById(id);
+            if (author == null)
+            {
+                throw new Exception("Author not found");
+            }
+            return _mapper.Map<AuthorReadDto>(author);
         }
         //Checked
         public void Update(int id, AuthorCreateDto dto)
         {
-            
+            if (_unitOfWork.Authors.GetById(id) == null)
+            {
+                throw new Exception("Author not found");
+            }
             Author updatedAuthor = _mapper.Map<Author>(dto);
             updatedAuthor.Id = id;
             _unitOfWork.Authors.Update(updatedAuthor);

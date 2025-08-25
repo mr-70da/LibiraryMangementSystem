@@ -1,6 +1,6 @@
 ﻿namespace LibraryManagementSystem.Domain.Enums
 {
-    internal enum BookStatus
+    public enum BookStatus
     {
         Available,
         Borrowed,

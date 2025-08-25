@@ -5,9 +5,6 @@ using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Infrastructure.Data;
 
 
-
-using LibraryManagementSystem.Infrastructure.Repositories.Implementation;
-
 namespace LibraryManagementSystem.Infrastructure.Repositories
 {
     public class BookRepository : GenericRepository<Book>, IBookRepository
@@ -23,6 +20,25 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
                                     .ToList();
 
             return returnedBooks;
+        }
+
+        public IQueryable<Book> GetFilteredBooks
+            (int? authorId, string? bookName, int? branchId)
+        {
+            var query = LibraryContext.Books.AsQueryable();
+            if(authorId.HasValue)
+            {
+                query = query.Where(b => b.AuthorId == authorId.Value);
+            }
+            if(!string.IsNullOrEmpty(bookName))
+            {
+                query = query.Where(b => b.Title.Contains(bookName));
+            }
+            if(branchId.HasValue)
+            {
+                query = query.Where(b => b.BranchId == branchId.Value);
+            }
+            return query;
         }
 
         public LibraryDbContext LibraryContext

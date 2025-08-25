@@ -1,7 +1,7 @@
 ﻿using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Infrastructure.Data;
-using LibraryManagementSystem.Infrastructure.Repositories.Implementation;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementSystem.Infrastructure.Repositories
@@ -19,5 +19,7 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
                 .Include(bh => bh.Book)
                 .ToList();
         }
+
+        
     }
 }

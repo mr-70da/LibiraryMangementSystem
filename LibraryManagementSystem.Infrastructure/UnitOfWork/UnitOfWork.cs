@@ -13,15 +13,21 @@ namespace LibraryManagementSystem.Infrastructure.UnitOfWork
         private readonly LibraryDbContext _context;
         public UnitOfWork(LibraryDbContext context , IBookRepository bookRepository,
             IUserRepository userRepository,
-            IGenericRepository<Author> authorRepository)
+            IGenericRepository<Author> authorRepository,
+            IGenericRepository<BorrowingHistory> borrowingRepository,
+            IGenericRepository<LibraryBranch> branchRepository)
         {
             _context = context;
             Books = bookRepository;
             Authors = authorRepository;
+            Borrowings = borrowingRepository;
+            Branches = branchRepository;
             Users = userRepository;
         }
 
         public IGenericRepository<Author> Authors { get; private set; }
+        public IGenericRepository<BorrowingHistory> Borrowings { get; }
+        public IGenericRepository<LibraryBranch> Branches { get; }
         public IBookRepository  Books { get; private set; }
         public IUserRepository Users { get; private set; }
 

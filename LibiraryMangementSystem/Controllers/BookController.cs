@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LibraryManagementSystem.Domain.Interfaces.Services;
 using LibraryManagementSystem.Application.DTOs;
+using LibraryManagementSystem.Domain.Enums;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -14,57 +15,108 @@ namespace LibraryManagementSystem.Controllers
             _bookService = service;
         }
 
-        [HttpGet("byAuther/{authorId}")]
-        public IActionResult All(int authorId)
+        
+        [HttpGet]
+        public IActionResult All([FromQuery] BookFilterDto filter)
         {
-            return Ok(_bookService.GetAllByAuthor(authorId));
-
+            try
+            {
+                var books = _bookService.GetBooks(filter);
+                return Ok(books);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(404, e.Message);
+            }
         }
+
         //create new book with author
         //Checked
         [HttpPost]
         public IActionResult Create([FromBody] BookCreateDto newBook)
         {
-            _bookService.Create(newBook);
+            try
+            {
+                _bookService.Create(newBook);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                return StatusCode(404, message);
+            }
             return Ok("Created!");
         }
         //checked
         [HttpPut("{bookIsbn}")]
         public IActionResult Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
         {
-            _bookService.Update(bookIsbn, updatedBook);
+            try {
+                _bookService.Update(bookIsbn, updatedBook);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                return StatusCode(404, message);
+            }
+
             return Ok("Updated!");
 
         }
         [HttpPut]
-        public IActionResult UpdateStatus(int bookIsbn)
+        public IActionResult UpdateStatus(int bookIsbn , BookStatus status)
         {
-
-            return Ok("Book deleted successfully.");
+            try
+            {
+                 _bookService.UpdateStatus(bookIsbn, status);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                return StatusCode(404, message);
+            }
+            return Ok("Book's status updated successfully.");
         }
         [HttpPut]
-        public IActionResult Borrow(int UserId, int BookIsbn, int BranchId)
+        public IActionResult Borrow(int UserId, int BookIsbn)
         {
-
-            return Ok();
+            try { 
+                _bookService.Borrow(UserId, BookIsbn);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                return StatusCode(404, message);
+            }
+            
+      
+            return Ok("Borrowed!");
         }
         [HttpPut]
         public IActionResult Return(int TransactionId)
         {
+            try
+            {
+                _bookService.Return(TransactionId);
+            }catch (Exception e)
+            {
+                string message = e.Message;
+                return StatusCode(404, message);
+            }
 
-            return Ok();
+
+            return Ok("Returned!");
         }
         [HttpGet]
         public IActionResult GetMostBorrowed(int listSize)
         {
-            // Logic to get borrowing history by user ID
-            return Ok("Borrowing history retrieved successfully.");
+            
+            return Ok(_bookService.GetMostBorrowed(listSize));
         }
         [HttpGet]
         public IActionResult GetBooksCountPerBranch()
         {
-            // Logic to get borrowing history by user ID
-            return Ok("Borrowing history retrieved successfully.");
+            
+            return Ok(_bookService.GetBooksCountPerBranch());
         }
 
     }

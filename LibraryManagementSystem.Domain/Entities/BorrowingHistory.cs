@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LibraryManagementSystem.Domain.Entities;
+﻿namespace LibraryManagementSystem.Domain.Entities;
 
 public partial class BorrowingHistory
 {

@@ -2,7 +2,7 @@
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-namespace LibraryManagementSystem.Infrastructure.Repositories.Implementation
+namespace LibraryManagementSystem.Infrastructure.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {

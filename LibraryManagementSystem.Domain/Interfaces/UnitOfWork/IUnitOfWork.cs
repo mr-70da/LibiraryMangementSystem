@@ -6,9 +6,12 @@ namespace LibraryManagementSystem.Domain.UnitOfWork
 {
     public interface IUnitOfWork :IDisposable
     {
-        IGenericRepository<Author> Authors { get; }
+        IAuthorRepository Authors { get; }
         IBookRepository Books { get; }
         IUserRepository Users { get; }
+        IBorrowingRepository Borrowings { get; }
+        IBranchRepository Branches { get; }
+       
         int Complete();
         
 

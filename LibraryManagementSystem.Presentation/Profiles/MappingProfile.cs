@@ -28,7 +28,7 @@ namespace LibraryManagementSystem.Application.Profiles
                 .ForMember(dest => dest.BorrowDate,
                     opt => opt.MapFrom(src => src.BorrowDate))
                 .ForMember(dest => dest.ReturnDate,
-                    opt => opt.MapFrom(src => src.ReturnDate != null));
+                    opt => opt.MapFrom(src => src.ReturnDate));
             // Entity -> ReadDto
             CreateMap<Book, BookReadDto>();
 

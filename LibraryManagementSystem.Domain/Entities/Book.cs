@@ -1,5 +1,8 @@
-﻿using System;
+﻿using LibraryManagementSystem.Domain.Enums;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryManagementSystem.Domain.Entities;
 
@@ -24,4 +27,6 @@ public partial class Book
     public virtual ICollection<BorrowingHistory> BorrowingHistories { get; set; } = new List<BorrowingHistory>();
 
     public virtual LibraryBranch? Branch { get; set; }
+    [NotMapped]
+    public BookStatus status { get; set; } = BookStatus.Available;
 }

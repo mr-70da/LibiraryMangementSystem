@@ -19,20 +19,47 @@ namespace LibraryManagementSystem.Controllers
         [HttpPost()]
         public IActionResult Create([FromBody] AuthorCreateDto newAuthor)
         {
-            _authorService.Create(newAuthor);
+            try
+            {
+                _authorService.Create(newAuthor);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                return StatusCode(404,message);
+
+            }
+           
             return Ok("Created!");
         }
         [HttpDelete()]
         public IActionResult Delete(int authorId)
         {
-            _authorService.Delete(authorId);
+            try
+            {
+                _authorService.Delete(authorId);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                return StatusCode(404,message);
+            }
             return Ok("Author deleted successfully.");
         }
 
         [HttpPut()]
         public IActionResult Update(int authorId, [FromBody] AuthorCreateDto updatedAuthor)
         {
-            _authorService.Update(authorId, updatedAuthor);
+            try
+            {
+                _authorService.Update(authorId, updatedAuthor);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                return StatusCode(404,message);
+            }
+            
             return Ok("Updated");
         }
     }
