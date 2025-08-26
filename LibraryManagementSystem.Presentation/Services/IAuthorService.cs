@@ -6,9 +6,9 @@ namespace LibraryManagementSystem.Domain.Interfaces.Services
     public interface IAuthorService
     {
 
-        public void Create(AuthorCreateDto dto);
-        public AuthorReadDto Get(int id);
-        public void Delete(int id);
-        public void Update(int id,AuthorCreateDto dto);
+        public Task CreateAsync(AuthorCreateDto dto);
+        public Task<AuthorReadDto> GetAsync(int id);
+        public Task DeleteAsync(int id);
+        public Task UpdateAsync(int id,AuthorCreateDto dto);
     }
 }

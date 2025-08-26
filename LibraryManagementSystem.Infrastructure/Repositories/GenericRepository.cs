@@ -13,22 +13,22 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
             _context = context;
             _dbSet = _context.Set<TEntity>();
         }
-        public void Add(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
-            _dbSet.Add(entity);
+            await _dbSet.AddAsync(entity);
         }
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             
-            return _dbSet.ToList();
+            return await _dbSet.ToListAsync();
         }
 
-        public TEntity GetById(object id)
+        public async Task<TEntity> GetByIdAsync(object id)
         {
-            return _dbSet.Find(id);
+            return await _dbSet.FindAsync(id);
         }
 
-        public void Remove(TEntity entity)
+        public  void Remove(TEntity entity)
         {
             _dbSet.Remove(entity);
 

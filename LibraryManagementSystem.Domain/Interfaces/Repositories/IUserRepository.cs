@@ -5,6 +5,6 @@ namespace LibraryManagementSystem.Domain.Interfaces.Repositories
 {
     public interface IUserRepository : IGenericRepository<User>
     {
-        public IEnumerable<BorrowingHistory> GetBorrowingHistory(int userId);
+        public Task<IEnumerable<BorrowingHistory>> GetBorrowingHistoryAsync(int userId);
     }
 }

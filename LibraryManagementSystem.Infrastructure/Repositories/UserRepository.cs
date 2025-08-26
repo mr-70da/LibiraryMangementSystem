@@ -12,7 +12,7 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
         {
         }
 
-        public IEnumerable<BorrowingHistory> GetBorrowingHistory(int userId)
+        public async Task <IEnumerable<BorrowingHistory>> GetBorrowingHistoryAsync(int userId)
         {
             return _context.BorrowingHistories
                 .Where(bh => bh.UserId.HasValue && bh.UserId.Value == userId)

@@ -18,32 +18,32 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
         }
 
 
-        public void Create(BookCreateDto bookDto)
+        public async Task CreateAsync(BookCreateDto bookDto)
         {
             var newBook = _mapper.Map<Book>(bookDto);
-            var author = _unitOfWork.Authors.GetById(bookDto.AuthorId);
+            var author = await _unitOfWork.Authors.GetByIdAsync(bookDto.AuthorId);
             if (author == null)
             {
                 throw new Exception("Author not found");
             }
-            _unitOfWork.Books.Add(newBook);
-            _unitOfWork.Complete();
+            await _unitOfWork.Books.AddAsync(newBook);
+            await _unitOfWork.Complete();
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var book = _unitOfWork.Books.GetById(id);
+            var book = await _unitOfWork.Books.GetByIdAsync(id);
             if (book == null)
             {
                 throw new Exception("Book not found");
             }
             _unitOfWork.Books.Remove(book);
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
         }
 
-        public BooksByAuthorDto GetBooks(BookFilterDto filter)
+        public async Task<BooksByAuthorDto> GetBooksAsync(BookFilterDto filter)
         {
-            var query = _unitOfWork.Books.GetFilteredBooks(filter.AuthorId, filter.BookName, filter.BranchId);
+            var query = await _unitOfWork.Books.GetFilteredBooksAsync(filter.AuthorId, filter.BookName, filter.BranchId);
 
             int totalBooks = query.Count();
             int totalPages = (int)Math.Ceiling(totalBooks / (double)filter.PageSize);
@@ -65,33 +65,33 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
 
 
 
-        public void Update(int id , BookCreateDto newBookDto)
+        public async Task UpdateAsync(int id , BookCreateDto newBookDto)
         {
-            if (_unitOfWork.Books.GetById(id) == null)
+            if (await _unitOfWork.Books.GetByIdAsync(id) == null)
             {
                 throw new Exception("Book not found");
             }
             var newBook = _mapper.Map<Book>(newBookDto);
             newBook.Isbn = id;
             _unitOfWork.Books.Update( newBook);
-            _unitOfWork.Complete(); 
+            await _unitOfWork.Complete(); 
         }
 
-        public void UpdateStatus(int bookIsbn , BookStatus newStatus)
+        public async Task UpdateStatusAsync(int bookIsbn , BookStatus newStatus)
         {
-            var book = _unitOfWork.Books.GetById(bookIsbn);
+            var book = await _unitOfWork.Books.GetByIdAsync(bookIsbn);
             if (book == null)
             {
                 throw new Exception("Book not found");
             }
             book.status = newStatus;
             _unitOfWork.Books.Update(book);
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
         }
-        public List<BooksPerBranchDto> GetBooksCountPerBranch()
+        public async Task<List<BooksPerBranchDto>> GetBooksCountPerBranchAsync()
         {
-            var result = (from b in _unitOfWork.Books.GetAll()
-                          join l in _unitOfWork.Branches.GetAll()
+            var result = (from b in await _unitOfWork.Books.GetAllAsync()
+                          join l in await _unitOfWork.Branches.GetAllAsync()
                               on b.BranchId equals l.Id
                           group b by new { b.BranchId, l.BranchName } into g
                           select new BooksPerBranchDto((int)g.Key.BranchId, g.Key.BranchName,  g.Count())
@@ -101,10 +101,10 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
         }
 
 
-        public List<MostBorrowedBooksDto> GetMostBorrowed(int listSize)
+        public async Task<List<MostBorrowedBooksDto>> GetMostBorrowedAsync(int listSize)
         {
-            var result = (from bh in _unitOfWork.Borrowings.GetAll()
-                          join b in _unitOfWork.Books.GetAll()
+            var result = (from bh in await _unitOfWork.Borrowings.GetAllAsync()
+                          join b in await _unitOfWork.Books.GetAllAsync()
                               on bh.BookId equals b.Isbn
                           group bh by new { b.Isbn, b.Title } into g
                           orderby g.Count() descending
@@ -120,19 +120,19 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
             return result;
         }
 
-        public void Return(int TransactionId)
+        public async Task ReturnAsync(int TransactionId)
         {
-            var transaction = _unitOfWork.Borrowings.GetById(TransactionId);
+            var transaction = await _unitOfWork.Borrowings.GetByIdAsync(TransactionId);
             if (transaction == null)
             {
                 throw new Exception("Transaction not found");
             }
-            var borrowing = _unitOfWork.Borrowings.GetById(TransactionId);
+            var borrowing = await _unitOfWork.Borrowings.GetByIdAsync(TransactionId);
             borrowing.ReturnDate = DateOnly.FromDateTime(DateTime.Now);
-            var book = _unitOfWork.Books.GetById((int)borrowing.BookId);
+            var book = await _unitOfWork.Books.GetByIdAsync((int)borrowing.BookId);
             book.status = BookStatus.Available;
             _unitOfWork.Borrowings.Update(borrowing);
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
         }
         //Ask
         internal bool CheckBookAvailability(Book book)
@@ -143,14 +143,14 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
             }
             return true;
         }
-        public void Borrow(int UserId, int BookIsbn)
+        public async Task BorrowAsync(int UserId, int BookIsbn)
         {
-            var user = _unitOfWork.Users.GetById(UserId);
+            var user = await _unitOfWork.Users.GetByIdAsync(UserId);
             if (user == null)
             {
                 throw new Exception("User not found");
             }
-            var book = _unitOfWork.Books.GetById(BookIsbn);
+            var book = await _unitOfWork.Books.GetByIdAsync(BookIsbn);
             if (book == null)
             {
                 throw new Exception("Book not found");
@@ -163,8 +163,8 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
                 borrowingHistory.BookId = BookIsbn;
                 borrowingHistory.BorrowDate =
                     DateOnly.FromDateTime(DateTime.Now);
-                _unitOfWork.Borrowings.Add(borrowingHistory);
-                _unitOfWork.Complete();
+                await _unitOfWork.Borrowings.AddAsync(borrowingHistory);
+                await _unitOfWork.Complete();
                 
             }
             

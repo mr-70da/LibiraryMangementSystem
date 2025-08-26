@@ -17,76 +17,62 @@ namespace LibraryManagementSystem.Controllers
 
         
         [HttpGet]
-        public IActionResult All([FromQuery] BookFilterDto filter)
+        public async Task <IActionResult> All([FromQuery] BookFilterDto filter)
         {
-            try
-            {
-                var books = _bookService.GetBooks(filter);
-                return Ok(books);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(404, e.Message);
-            }
+            var books = await _bookService.GetBooksAsync(filter);
+            return Ok(books);
+            
         }
 
         //create new book with author
         //Checked
         [HttpPost]
-        public IActionResult Create([FromBody] BookCreateDto newBook)
+        public async Task<IActionResult> Create([FromBody] BookCreateDto newBook)
         {
-            try
-            {
-                _bookService.Create(newBook);
-            }
-            catch (Exception e)
-            {
-                string message = e.Message;
-                return StatusCode(404, message);
-            }
+            await _bookService.CreateAsync(newBook);
             return Ok("Created!");
         }
         //checked
         [HttpPut("{bookIsbn}")]
-        public IActionResult Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
+        public async Task<IActionResult> Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
         {
             
-            _bookService.Update(bookIsbn, updatedBook);
+            await _bookService.UpdateAsync(bookIsbn, updatedBook);
             return Ok("Updated!");
 
         }
         [HttpPut]
-        public IActionResult UpdateStatus(int bookIsbn , BookStatus status)
+        public async Task<IActionResult> UpdateStatus(int bookIsbn , BookStatus status)
         {
             
-            _bookService.UpdateStatus(bookIsbn, status);
+            await _bookService.UpdateStatusAsync(bookIsbn, status);
             return Ok("Book's status updated successfully.");
         }
         [HttpPut]
-        public IActionResult Borrow(int UserId, int BookIsbn)
+        public async Task<IActionResult> Borrow(int UserId, int BookIsbn)
         {
             
-            _bookService.Borrow(UserId, BookIsbn);
+            await _bookService.BorrowAsync(UserId, BookIsbn);
             return Ok("Borrowed!");
         }
         [HttpPut]
-        public IActionResult Return(int TransactionId)
+        public async Task<IActionResult> Return(int TransactionId)
         {
             
-            _bookService.Return(TransactionId);
+            await _bookService.ReturnAsync(TransactionId);
             return Ok("Returned!");
         }
         [HttpGet]
-        public IActionResult GetMostBorrowed(int listSize)
+        public async Task<IActionResult> GetMostBorrowed(int listSize)
         {
             
-            return Ok(_bookService.GetMostBorrowed(listSize));
+            return Ok(await _bookService.GetMostBorrowedAsync(listSize));
         }
         [HttpGet]
-        public IActionResult GetBooksCountPerBranch()
+        public async Task<IActionResult> GetBooksCountPerBranch()
         {
             
-            return Ok(_bookService.GetBooksCountPerBranch());
+            return Ok(await _bookService.GetBooksCountPerBranchAsync());
         }
 
     }

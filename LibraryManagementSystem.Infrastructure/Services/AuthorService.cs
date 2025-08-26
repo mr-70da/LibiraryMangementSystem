@@ -21,30 +21,30 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
 
         
         //Checked
-        public void Create(AuthorCreateDto dto)
+        public async Task CreateAsync(AuthorCreateDto dto)
         {
             var author = _mapper.Map<Author>(dto);
-            _unitOfWork.Authors.Add(author);
-            _unitOfWork.Complete();
+            await _unitOfWork.Authors.AddAsync(author);
+            await _unitOfWork.Complete();
             
         }
         //Checked
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var author = _unitOfWork.Authors.GetById(id);
+            var author = await _unitOfWork.Authors.GetByIdAsync(id);
             if (author == null)
             {
                 throw new Exception("Author not found");
             }
             _unitOfWork.Authors.Remove(author);
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
 
         }
 
         //Checked
-        public AuthorReadDto Get(int id)
+        public async Task<AuthorReadDto> GetAsync(int id)
         {
-            var author = _unitOfWork.Authors.GetById(id);
+            var author = await _unitOfWork.Authors.GetByIdAsync(id);
             if (author == null)
             {
                 throw new Exception("Author not found");
@@ -52,16 +52,16 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
             return _mapper.Map<AuthorReadDto>(author);
         }
         //Checked
-        public void Update(int id, AuthorCreateDto dto)
+        public async Task UpdateAsync(int id, AuthorCreateDto dto)
         {
-            if (_unitOfWork.Authors.GetById(id) == null)
+            if (await _unitOfWork.Authors.GetByIdAsync(id) == null)
             {
                 throw new Exception("Author not found");
             }
-            Author updatedAuthor = _mapper.Map<Author>(dto);
+            Author updatedAuthor =  _mapper.Map<Author>(dto);
             updatedAuthor.Id = id;
             _unitOfWork.Authors.Update(updatedAuthor);
-            _unitOfWork.Complete();
+            await _unitOfWork.Complete();
         }
     }
 }

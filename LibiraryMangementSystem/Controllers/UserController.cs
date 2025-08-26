@@ -15,21 +15,21 @@ namespace LibraryManagementSystem.APi.Controllers
             _userService = userService;
         }
         [HttpPost]
-        public IActionResult Create([FromBody] UserCreateDto user)
+        public async Task<IActionResult> Create([FromBody] UserCreateDto user)
         {
-            _userService.Create(user);
+            await _userService.CreateAsync(user);
             return Ok("User created successfully.");
         }
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_userService.GetAll());
+            return Ok(await _userService.GetAllAsync());
         }
         [HttpGet]
-        public IActionResult BorrowingHistory(int userId)
+        public async Task<IActionResult> BorrowingHistory(int userId)
         {
             List<UserBorrowingHistoryDto>BorrowingHis;
-            BorrowingHis = _userService.GetBorrowingHistory(userId);
+            BorrowingHis = await _userService.GetBorrowingHistoryAsync(userId);
             return Ok(BorrowingHis);
         }
     }

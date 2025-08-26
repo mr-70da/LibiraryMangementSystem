@@ -10,9 +10,9 @@ namespace LibraryManagementSystem.Application.Services
 {
     public interface IUserService
     {
-        public void Create(UserCreateDto userCreateDto);
-        public List<UserBorrowingHistoryDto> GetBorrowingHistory(int userId);
-        public List<UserReadDto> GetAll();
+        public Task CreateAsync(UserCreateDto userCreateDto);
+        public Task <List<UserBorrowingHistoryDto>> GetBorrowingHistoryAsync(int userId);
+        public Task<List<UserReadDto>> GetAllAsync();
     
     }
 }

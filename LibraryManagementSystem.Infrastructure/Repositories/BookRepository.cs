@@ -3,6 +3,7 @@
 using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Infrastructure.Data;
+using System.Runtime.CompilerServices;
 
 
 namespace LibraryManagementSystem.Infrastructure.Repositories
@@ -13,7 +14,7 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
         {
         }
         
-        public List<Book> GetAllByAuthor(int authorId)
+        public async Task<List<Book>> GetAllByAuthorAsync(int authorId)
         {
             List<Book> returnedBooks = LibraryContext.Books
                                     .Where(b => b.AuthorId ==authorId)
@@ -22,7 +23,7 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
             return returnedBooks;
         }
 
-        public IQueryable<Book> GetFilteredBooks
+        public async Task<IQueryable<Book>> GetFilteredBooksAsync
             (int? authorId, string? bookName, int? branchId)
         {
             var query = LibraryContext.Books.AsQueryable();

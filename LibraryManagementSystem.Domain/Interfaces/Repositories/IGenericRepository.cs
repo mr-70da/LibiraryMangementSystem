@@ -4,13 +4,13 @@ namespace LibraryManagementSystem.Domain.Interfaces.Repositories
     public interface IGenericRepository<TEntity> where TEntity : class
     {
         //create
-        void Add(TEntity entity);
+        Task AddAsync(TEntity entity);
         
         //update
         void Update(TEntity entity);
         //read
-        TEntity GetById(object id);
-        IEnumerable<TEntity> GetAll();
+        Task <TEntity> GetByIdAsync(object id);
+        Task<IEnumerable<TEntity>> GetAllAsync();
 
         //delete
         void Remove(TEntity id);

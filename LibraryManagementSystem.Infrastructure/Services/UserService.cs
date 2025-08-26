@@ -17,22 +17,22 @@ namespace LibraryManagementSystem.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public void Create(UserCreateDto userCreateDto)
+        public async Task CreateAsync(UserCreateDto userCreateDto)
         {
             
-            _unitOfWork.Users.Add(_mapper.Map<User>(userCreateDto));
-            _unitOfWork.Complete();
+            await _unitOfWork.Users.AddAsync(_mapper.Map<User>(userCreateDto));
+            await _unitOfWork.Complete();
         }
 
-        public List<UserReadDto> GetAll()
+        public async Task<List<UserReadDto>> GetAllAsync()
         {
-            var users = _unitOfWork.Users.GetAll().ToList();
+            var users =  await _unitOfWork.Users.GetAllAsync();
             return _mapper.Map<List<UserReadDto>>(users);
         }
 
-        public List<UserBorrowingHistoryDto> GetBorrowingHistory(int userId)
+        public async Task<List<UserBorrowingHistoryDto>> GetBorrowingHistoryAsync(int userId)
         {
-            var borrowingHistory = _unitOfWork.Users.GetBorrowingHistory(userId).ToList();
+            var borrowingHistory = await _unitOfWork.Users.GetBorrowingHistoryAsync(userId);
             return _mapper.Map<List<UserBorrowingHistoryDto>>(borrowingHistory);
         }
     }

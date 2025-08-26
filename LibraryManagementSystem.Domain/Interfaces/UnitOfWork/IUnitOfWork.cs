@@ -12,7 +12,7 @@ namespace LibraryManagementSystem.Domain.UnitOfWork
         IBorrowingRepository Borrowings { get; }
         IBranchRepository Branches { get; }
        
-        int Complete();
+        Task<int> Complete();
         
 
     }

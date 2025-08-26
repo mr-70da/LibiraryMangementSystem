@@ -17,16 +17,16 @@ namespace LibraryManagementSystem.Controllers
 
         //Create new auther
         [HttpPost()]
-        public IActionResult Create([FromBody] AuthorCreateDto newAuthor)
+        public async Task<IActionResult> Create([FromBody] AuthorCreateDto newAuthor)
         {
-            _authorService.Create(newAuthor);
+            await _authorService.CreateAsync(newAuthor);
             return Ok("Created!");
         }
         [HttpDelete()]
         public IActionResult Delete(int authorId)
         {
             
-            _authorService.Delete(authorId);
+            _authorService.DeleteAsync(authorId);
        
             return Ok("Author deleted successfully.");
         }
@@ -35,7 +35,7 @@ namespace LibraryManagementSystem.Controllers
         public IActionResult Update(int authorId, [FromBody] AuthorCreateDto updatedAuthor)
         {
             
-             _authorService.Update(authorId, updatedAuthor);
+             _authorService.UpdateAsync(authorId, updatedAuthor);
              return Ok("Updated");
         }
     }
