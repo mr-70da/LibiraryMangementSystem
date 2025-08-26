@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Infrastructure.Repositories
 {
-    internal class BranchRepository: GenericRepository<LibraryBranch>, IBranchRepository
+    public class BranchRepository: GenericRepository<LibraryBranch>, IBranchRepository
     {
         public BranchRepository(LibraryDbContext context) : base(context)
         {

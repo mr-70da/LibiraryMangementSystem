@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36327.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManagementSystem.APi", "LibiraryMangementSystem\LibraryManagementSystem.APi.csproj", "{9BDDC173-982D-4FC1-9F80-125A9A0B129C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManagementSystem.API", "LibiraryMangementSystem\LibraryManagementSystem.API.csproj", "{9BDDC173-982D-4FC1-9F80-125A9A0B129C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManagementSystem.Domain", "LibraryManagementSystem.Domain\LibraryManagementSystem.Domain.csproj", "{6313F220-D11D-4ED0-AC65-3AF1C57214DA}"
 EndProject

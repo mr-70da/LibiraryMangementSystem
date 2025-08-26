@@ -2,8 +2,7 @@
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using LibraryManagementSystem.Infrastructure.Data;
-using LibraryManagementSystem.Infrastructure.Repositories;
-using LibraryManagementSystem.Infrastructure.Repositories.Implementation;
+
 
 
 namespace LibraryManagementSystem.Infrastructure.UnitOfWork
@@ -13,9 +12,9 @@ namespace LibraryManagementSystem.Infrastructure.UnitOfWork
         private readonly LibraryDbContext _context;
         public UnitOfWork(LibraryDbContext context , IBookRepository bookRepository,
             IUserRepository userRepository,
-            IGenericRepository<Author> authorRepository,
-            IGenericRepository<BorrowingHistory> borrowingRepository,
-            IGenericRepository<LibraryBranch> branchRepository)
+            IAuthorRepository authorRepository,
+            IBorrowingRepository borrowingRepository,
+            IBranchRepository branchRepository)
         {
             _context = context;
             Books = bookRepository;
@@ -25,9 +24,9 @@ namespace LibraryManagementSystem.Infrastructure.UnitOfWork
             Users = userRepository;
         }
 
-        public IGenericRepository<Author> Authors { get; private set; }
-        public IGenericRepository<BorrowingHistory> Borrowings { get; }
-        public IGenericRepository<LibraryBranch> Branches { get; }
+        public IAuthorRepository Authors { get; private set; }
+        public IBorrowingRepository Borrowings { get; }
+        public IBranchRepository Branches { get; }
         public IBookRepository  Books { get; private set; }
         public IUserRepository Users { get; private set; }
 

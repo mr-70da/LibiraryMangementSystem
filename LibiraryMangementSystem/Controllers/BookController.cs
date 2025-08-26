@@ -50,60 +50,30 @@ namespace LibraryManagementSystem.Controllers
         [HttpPut("{bookIsbn}")]
         public IActionResult Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
         {
-            try {
-                _bookService.Update(bookIsbn, updatedBook);
-            }
-            catch (Exception e)
-            {
-                string message = e.Message;
-                return StatusCode(404, message);
-            }
-
+            
+            _bookService.Update(bookIsbn, updatedBook);
             return Ok("Updated!");
 
         }
         [HttpPut]
         public IActionResult UpdateStatus(int bookIsbn , BookStatus status)
         {
-            try
-            {
-                 _bookService.UpdateStatus(bookIsbn, status);
-            }
-            catch (Exception e)
-            {
-                string message = e.Message;
-                return StatusCode(404, message);
-            }
+            
+            _bookService.UpdateStatus(bookIsbn, status);
             return Ok("Book's status updated successfully.");
         }
         [HttpPut]
         public IActionResult Borrow(int UserId, int BookIsbn)
         {
-            try { 
-                _bookService.Borrow(UserId, BookIsbn);
-            }
-            catch (Exception e)
-            {
-                string message = e.Message;
-                return StatusCode(404, message);
-            }
             
-      
+            _bookService.Borrow(UserId, BookIsbn);
             return Ok("Borrowed!");
         }
         [HttpPut]
         public IActionResult Return(int TransactionId)
         {
-            try
-            {
-                _bookService.Return(TransactionId);
-            }catch (Exception e)
-            {
-                string message = e.Message;
-                return StatusCode(404, message);
-            }
-
-
+            
+            _bookService.Return(TransactionId);
             return Ok("Returned!");
         }
         [HttpGet]

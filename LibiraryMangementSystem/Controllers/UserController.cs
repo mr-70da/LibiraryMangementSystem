@@ -17,38 +17,19 @@ namespace LibraryManagementSystem.APi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] UserCreateDto user)
         {
-            try
-            {
             _userService.Create(user);
-
-            }catch(Exception e)
-            {
-                string message = e.Message;
-                return StatusCode(404, message);
-            }
             return Ok("User created successfully.");
         }
         [HttpGet]
         public IActionResult GetAll()
         {
-            
-            
             return Ok(_userService.GetAll());
         }
         [HttpGet]
         public IActionResult BorrowingHistory(int userId)
         {
             List<UserBorrowingHistoryDto>BorrowingHis;
-            try
-            {
-                BorrowingHis = _userService.GetBorrowingHistory(userId);
-            }
-            catch(Exception e)
-            {
-                string message = e.Message;
-                return StatusCode(404, message);
-            }
-
+            BorrowingHis = _userService.GetBorrowingHistory(userId);
             return Ok(BorrowingHis);
         }
     }

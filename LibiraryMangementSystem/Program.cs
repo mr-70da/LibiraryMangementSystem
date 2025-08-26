@@ -6,17 +6,23 @@ using LibraryManagementSystem.Domain.Interfaces.Services;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using LibraryManagementSystem.Infrastructure.Data;
 using LibraryManagementSystem.Infrastructure.Repositories;
-using LibraryManagementSystem.Infrastructure.Repositories.Implementation;
+
 using LibraryManagementSystem.Infrastructure.Services;
 using LibraryManagementSystem.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 //Repo
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+builder.Services.AddScoped<IBorrowingRepository, BorrowingRepository>();
+
+
+
 //unit of work
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -39,10 +45,11 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
