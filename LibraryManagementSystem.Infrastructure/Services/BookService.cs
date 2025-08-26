@@ -47,8 +47,8 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
                 filter.AuthorId, filter.BookName, filter.BranchId);
 
             int totalBooks = query.Count();
-            
-            //mynf3sh ytfslo 
+
+            //mynf3sh ytfslo lw7do 3ashan kda 3mlt pagination 3la el query
             var paginatedBooks = query
                 .Skip(filter.Skip)
                 .Take(filter.Take)
@@ -69,7 +69,7 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
         {
             if (await _unitOfWork.Books.GetByIdAsync(id) == null)
             {
-                throw new Exception("Book not found");
+                throw new KeyNotFoundException("Book not found");
             }
             var newBook = _mapper.Map<Book>(newBookDto);
             newBook.Isbn = id;
@@ -77,17 +77,6 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
             await _unitOfWork.Complete(); 
         }
 
-        public async Task UpdateStatusAsync(int bookIsbn , BookStatus newStatus)
-        {
-            var book = await _unitOfWork.Books.GetByIdAsync(bookIsbn);
-            if (book == null)
-            {
-                throw new Exception("Book not found");
-            }
-            book.status = newStatus;
-            _unitOfWork.Books.Update(book);
-            await _unitOfWork.Complete();
-        }
         public async Task<List<BooksPerBranchDto>> GetBooksCountPerBranchAsync()
         {
             var result = (from b in await _unitOfWork.Books.GetAllAsync()
@@ -119,25 +108,42 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
 
             return result;
         }
+        public async Task UpdateStatusAsync(int bookIsbn , BookStatus newStatus)
+        {
+            var book = await _unitOfWork.Books.GetByIdAsync(bookIsbn);
+            if (book == null)
+            {
+                throw new KeyNotFoundException("Book not found");
+            }
+            book.Status = newStatus;
+            _unitOfWork.Books.Update(book);
+            
+            await _unitOfWork.Complete();
+        }
 
         public async Task ReturnAsync(int TransactionId)
         {
             var transaction = await _unitOfWork.Borrowings.GetByIdAsync(TransactionId);
             if (transaction == null)
             {
-                throw new Exception("Transaction not found");
+                throw new KeyNotFoundException("Transaction not found");
             }
             var borrowing = await _unitOfWork.Borrowings.GetByIdAsync(TransactionId);
+            if (borrowing.ReturnDate.HasValue)
+            {
+                throw new Exception("This Book is already returned.");
+            }
             borrowing.ReturnDate = DateOnly.FromDateTime(DateTime.Now);
             var book = await _unitOfWork.Books.GetByIdAsync((int)borrowing.BookId);
-            book.status = BookStatus.Available;
+            book.Status = BookStatus.Available;
             _unitOfWork.Borrowings.Update(borrowing);
+            
             await _unitOfWork.Complete();
         }
         //Ask
         internal bool CheckBookAvailability(Book book)
         {
-            if (book.status != BookStatus.Available)
+            if (book.Status != BookStatus.Available)
             {
                 throw new Exception("Book is not available");
             }
@@ -145,20 +151,27 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
         }
         public async Task BorrowAsync(int UserId, int BookIsbn)
         {
+            if(UserId == null || BookIsbn == null){
+                throw new ArgumentNullException("User id and book ISBN should be specified");
+
+            }
             var user = await _unitOfWork.Users.GetByIdAsync(UserId);
             if (user == null)
             {
-                throw new Exception("User not found");
+                throw new KeyNotFoundException("User not found");
             }
             var book = await _unitOfWork.Books.GetByIdAsync(BookIsbn);
             if (book == null)
             {
-                throw new Exception("Book not found");
+                throw new KeyNotFoundException("Book not found");
             }
             if (CheckBookAvailability(book))
-            {   
+            {
+                
                 BorrowingHistory borrowingHistory = new BorrowingHistory();
-                book.status = BookStatus.Borrowed;
+                book.Status = BookStatus.Borrowed;
+                _unitOfWork.Books.Update(book);
+                
                 borrowingHistory.UserId = UserId;
                 borrowingHistory.BookId = BookIsbn;
                 borrowingHistory.BorrowDate =
@@ -168,6 +181,7 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
                 
             }
             
+
 
         }
     }

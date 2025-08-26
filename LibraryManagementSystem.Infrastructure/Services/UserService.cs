@@ -32,6 +32,10 @@ namespace LibraryManagementSystem.Infrastructure.Services
 
         public async Task<List<UserBorrowingHistoryDto>> GetBorrowingHistoryAsync(int userId)
         {
+            if(_unitOfWork.Users.GetByIdAsync(userId) == null)
+            {
+                throw new KeyNotFoundException("User not found");
+            }
             var borrowingHistory = await _unitOfWork.Users.GetBorrowingHistoryAsync(userId);
             return _mapper.Map<List<UserBorrowingHistoryDto>>(borrowingHistory);
         }

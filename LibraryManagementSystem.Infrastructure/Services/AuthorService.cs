@@ -34,7 +34,7 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
             var author = await _unitOfWork.Authors.GetByIdAsync(id);
             if (author == null)
             {
-                throw new Exception("Author not found");
+                throw new KeyNotFoundException("Author not found");
             }
             _unitOfWork.Authors.Remove(author);
             await _unitOfWork.Complete();
@@ -47,7 +47,7 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
             var author = await _unitOfWork.Authors.GetByIdAsync(id);
             if (author == null)
             {
-                throw new Exception("Author not found");
+                throw new KeyNotFoundException("Author not found");
             }
             return _mapper.Map<AuthorReadDto>(author);
         }
@@ -56,8 +56,9 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
         {
             if (await _unitOfWork.Authors.GetByIdAsync(id) == null)
             {
-                throw new Exception("Author not found");
+                throw new KeyNotFoundException("Author not found"); 
             }
+
             Author updatedAuthor =  _mapper.Map<Author>(dto);
             updatedAuthor.Id = id;
             _unitOfWork.Authors.Update(updatedAuthor);

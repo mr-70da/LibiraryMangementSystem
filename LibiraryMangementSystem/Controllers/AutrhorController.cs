@@ -23,19 +23,19 @@ namespace LibraryManagementSystem.Controllers
             return Ok("Created!");
         }
         [HttpDelete()]
-        public IActionResult Delete(int authorId)
+        public async Task<IActionResult> Delete(int authorId)
         {
             
-            _authorService.DeleteAsync(authorId);
+            await _authorService.DeleteAsync(authorId);
        
             return Ok("Author deleted successfully.");
         }
 
         [HttpPut()]
-        public IActionResult Update(int authorId, [FromBody] AuthorCreateDto updatedAuthor)
+        public async Task<IActionResult> Update(int authorId, [FromBody] AuthorCreateDto updatedAuthor)
         {
             
-             _authorService.UpdateAsync(authorId, updatedAuthor);
+             await _authorService.UpdateAsync(authorId, updatedAuthor);
              return Ok("Updated");
         }
     }

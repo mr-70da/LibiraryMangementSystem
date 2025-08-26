@@ -64,6 +64,9 @@ public partial class LibraryDbContext : DbContext
             entity.HasOne(d => d.Branch).WithMany(p => p.Books)
                 .HasForeignKey(d => d.BranchId)
                 .HasConstraintName("FK__Book__BranchId__4F7CD00D");
+            entity.Property(e => e.Status)
+                  .HasColumnName("Status")
+                  .HasConversion<int>();
         });
 
         modelBuilder.Entity<BorrowingHistory>(entity =>

@@ -27,6 +27,6 @@ public partial class Book
     public virtual ICollection<BorrowingHistory> BorrowingHistories { get; set; } = new List<BorrowingHistory>();
 
     public virtual LibraryBranch? Branch { get; set; }
-    [NotMapped]
-    public BookStatus status { get; set; } = BookStatus.Available;
+   
+    public BookStatus Status { get; set; } = BookStatus.Available;
 }
