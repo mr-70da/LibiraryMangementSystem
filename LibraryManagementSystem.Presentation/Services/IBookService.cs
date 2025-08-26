@@ -9,7 +9,7 @@ namespace LibraryManagementSystem.Domain.Interfaces.Services
         public Task UpdateAsync(int id, BookCreateDto UpdatedBook);
         public Task DeleteAsync(int id);
         public Task CreateAsync(BookCreateDto bookDto);
-        public Task<BooksByAuthorDto> GetBooksAsync(BookFilterDto filter);
+        public Task<BooksFilterResponse> GetBooksAsync(BooksFilterRequest filter);
         public Task<List<BooksPerBranchDto>> GetBooksCountPerBranchAsync();
         public Task BorrowAsync(int UserId, int BookIsbn);
         public Task ReturnAsync(int TransactionId);

@@ -3,6 +3,7 @@
 using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 
 
@@ -17,8 +18,11 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
         public async Task<List<Book>> GetAllByAuthorAsync(int authorId)
         {
             List<Book> returnedBooks = LibraryContext.Books
+
                                     .Where(b => b.AuthorId ==authorId)
+                                    
                                     .ToList();
+            Console.WriteLine(returnedBooks);
 
             return returnedBooks;
         }

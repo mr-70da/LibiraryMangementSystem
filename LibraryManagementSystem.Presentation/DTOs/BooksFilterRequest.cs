@@ -1,6 +1,6 @@
 ﻿namespace LibraryManagementSystem.Application.DTOs
 {
-    public class BookFilterDto
+    public class BooksFilterRequest
     {
        
         public int? AuthorId { get; set; } 
@@ -8,7 +8,7 @@
         public int? BranchId { get; set; }
 
     
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;  
+        public int Skip { get; set; } = 0;
+        public int Take { get; set; } = 5;  
     }
 }

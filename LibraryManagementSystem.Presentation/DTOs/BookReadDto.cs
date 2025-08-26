@@ -1,8 +1,8 @@
 ﻿namespace LibraryManagementSystem.Application.DTOs
 {
-    public class BookReadDto
+    public class BookReadDto : BookDto
     {
         public int Isbn { get; set; }
-        public List<string> AuthorNames { get; set; } = new();
+        public int AuthorId { get; set; }
     }
 }

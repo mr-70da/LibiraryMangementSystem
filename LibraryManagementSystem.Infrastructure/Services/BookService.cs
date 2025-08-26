@@ -41,26 +41,26 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
             await _unitOfWork.Complete();
         }
 
-        public async Task<BooksByAuthorDto> GetBooksAsync(BookFilterDto filter)
+        public async Task<BooksFilterResponse> GetBooksAsync(BooksFilterRequest filter)
         {
-            var query = await _unitOfWork.Books.GetFilteredBooksAsync(filter.AuthorId, filter.BookName, filter.BranchId);
+            var query = await _unitOfWork.Books.GetFilteredBooksAsync(
+                filter.AuthorId, filter.BookName, filter.BranchId);
 
             int totalBooks = query.Count();
-            int totalPages = (int)Math.Ceiling(totalBooks / (double)filter.PageSize);
-
+            
+            //mynf3sh ytfslo 
             var paginatedBooks = query
-                .Skip((filter.PageNumber - 1) * filter.PageSize)
-                .Take(filter.PageSize)
+                .Skip(filter.Skip)
+                .Take(filter.Take)
                 .ToList();
 
-            var bookDto = _mapper.Map<List<BookWithoutAuthorDto>>(paginatedBooks);
+            var bookDto = _mapper.Map<List<BookReadDto>>(paginatedBooks);
 
-            return new BooksByAuthorDto(
-                filter.AuthorId ?? 0,
-                bookDto,
-                totalBooks
-                
-            );
+           return new BooksFilterResponse
+           {
+               TotalCount = totalBooks,
+               Books = bookDto
+           };
         }
 
 

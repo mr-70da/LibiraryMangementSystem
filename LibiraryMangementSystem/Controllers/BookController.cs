@@ -17,7 +17,7 @@ namespace LibraryManagementSystem.Controllers
 
         
         [HttpGet]
-        public async Task <IActionResult> All([FromQuery] BookFilterDto filter)
+        public async Task <IActionResult> All([FromQuery] BooksFilterRequest filter)
         {
             var books = await _bookService.GetBooksAsync(filter);
             return Ok(books);
