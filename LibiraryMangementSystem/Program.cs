@@ -1,4 +1,6 @@
 ﻿
+using System.Text;
+using LibraryManagementSystem.API.Helper;
 using LibraryManagementSystem.Application.Interfaces.Services;
 using LibraryManagementSystem.Application.Services;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
@@ -9,7 +11,9 @@ using LibraryManagementSystem.Infrastructure.Repositories;
 
 using LibraryManagementSystem.Infrastructure.Services;
 using LibraryManagementSystem.Infrastructure.UnitOfWork;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +44,20 @@ builder.Services.AddDbContext<LibraryDbContext>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidAudience = builder.Configuration["JWT:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+        };
+    });
 
 var app = builder.Build();
 
@@ -51,6 +69,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

@@ -12,5 +12,8 @@ public partial class User
 
     public DateOnly? RegistrationDate { get; set; }
 
+    public string PasswordHash { get; set; } = null!; 
+    public string Role { get; set; } = "User";
+
     public virtual ICollection<BorrowingHistory> BorrowingHistories { get; set; } = new List<BorrowingHistory>();
 }
