@@ -1,5 +1,6 @@
 ﻿using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementSystem.Controllers
@@ -16,7 +17,8 @@ namespace LibraryManagementSystem.Controllers
         }
 
         //Create new auther
-        [HttpPost()]
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] AuthorCreateDto newAuthor)
         {
             await _authorService.CreateAsync(newAuthor);
