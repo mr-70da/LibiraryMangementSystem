@@ -4,7 +4,7 @@ using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Application.Services;
 using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.UnitOfWork;
-using LibraryManagementSystem.Infrastructure.Models;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -17,15 +17,14 @@ namespace LibraryManagementSystem.Infrastructure.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IJWTService _jwtService;
+    
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-
-
+        
         public AuthenticationService(IUnitOfWork unitOfWork,
-            IJWTService jWTService, IMapper mapper , IConfiguration configuration)
+           IMapper mapper , IConfiguration configuration)
         {
-            _jwtService = jWTService;
+            
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _configuration = configuration;
@@ -38,7 +37,7 @@ namespace LibraryManagementSystem.Infrastructure.Services
                 return null;
             }
 
-            var token = await _jwtService.GenerateToken(user.Id);
+            var token = await GenerateToken(user);
 
             return new LoginResponseDto
             {
@@ -61,7 +60,8 @@ namespace LibraryManagementSystem.Infrastructure.Services
             await _unitOfWork.Users.AddAsync(newUser);
             await _unitOfWork.Complete();
             Console.WriteLine(newUser.Id);
-            //var token = await _jwtService.GenerateToken(newUser.Id);
+            var token = await GenerateToken(newUser);
+
             return new LoginResponseDto
             {
                 Token = null,
@@ -69,13 +69,14 @@ namespace LibraryManagementSystem.Infrastructure.Services
             };
         }
 
-        public async Task<string> GenerateToken(User user)
+        
+        private async Task<string> GenerateToken(User user)
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(ClaimTypes.Role, role.Name)
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));

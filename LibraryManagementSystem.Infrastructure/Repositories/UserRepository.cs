@@ -19,7 +19,11 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
                 .Include(bh => bh.Book)
                 .ToList();
         }
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
 
-        
+
     }
 }

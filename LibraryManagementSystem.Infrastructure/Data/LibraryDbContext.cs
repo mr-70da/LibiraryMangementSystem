@@ -103,7 +103,7 @@ public partial class LibraryDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User__3214EC07EF460D35");
+            entity.HasKey(e => e.Id).HasName("PK__User__3214EC0719C7CC4F");
 
             entity.ToTable("User");
 
@@ -116,7 +116,24 @@ public partial class LibraryDbContext : DbContext
             entity.Property(e => e.LastName)
                 .HasMaxLength(200)
                 .IsUnicode(false);
+            entity.Property(e=>e.RoleId)
+                  .HasColumnName("RoleId")
+                  .HasConversion<int>();
+            entity.Property(e => e.RegistrationDate)
+                .HasColumnType("RegistrationDate")
+                .HasDefaultValueSql("(getdate())");
         });
+        modelBuilder.Entity<Role>(entity => 
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Roles__3214EC07A780316D");
+            entity.ToTable("Roles");
+            entity.Property(e => e.Name)
+                  .HasMaxLength(50)
+                  .IsUnicode(false);
+
+
+        });
+            
 
         OnModelCreatingPartial(modelBuilder);
     }
