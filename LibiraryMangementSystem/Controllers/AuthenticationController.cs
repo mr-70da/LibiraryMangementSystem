@@ -20,7 +20,7 @@ namespace LibraryManagementSystem.API.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<ActionResult<LoginResponseDto>> Login(LoginRequestDto request)
         {
             var response = await _authenticationService.Login(request);
@@ -32,7 +32,7 @@ namespace LibraryManagementSystem.API.Controllers
            
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<ActionResult<LoginResponseDto>> Register(RegisterRequestDto request)
         {
 

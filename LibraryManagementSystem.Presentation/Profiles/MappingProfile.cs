@@ -45,6 +45,15 @@ namespace LibraryManagementSystem.Application.Profiles
             CreateMap<User,UserCreateDto>();
             // CreateDto -> Entity
             CreateMap<UserCreateDto, User>();
+
+            CreateMap<RegisterRequestDto, User>();
+            CreateMap<User, RegisterRequestDto>();
+            CreateMap<LoginRequestDto, User>();
+            CreateMap<User, LoginRequestDto>();
+            CreateMap<LoginResponseDto, User>();
+            CreateMap<User, LoginResponseDto>();
+
+
         }
     }
 }

@@ -49,7 +49,7 @@ namespace LibraryManagementSystem.Infrastructure.Services
         public async Task<LoginResponseDto> Register(RegisterRequestDto requestDto)
         {
             var email = requestDto.Email.ToLower();
-            var newUser = _mapper.Map<Domain.Entities.User>(requestDto);
+            var newUser = _mapper.Map<User>(requestDto);
             newUser.Email = email;
             var checkUser = await _unitOfWork.Users.GetByEmailAsync(email);
             if(checkUser  != null)
@@ -59,24 +59,24 @@ namespace LibraryManagementSystem.Infrastructure.Services
             newUser.Password = BCrypt.Net.BCrypt.HashPassword(requestDto.Password);
             await _unitOfWork.Users.AddAsync(newUser);
             await _unitOfWork.Complete();
-            Console.WriteLine(newUser.Id);
+            
             var token = await GenerateToken(newUser);
 
             return new LoginResponseDto
             {
-                Token = null,
+                Token = token,
                 Expiration = DateTime.UtcNow.AddHours(1)
             };
         }
 
         
-        private async Task<string> GenerateToken(User user)
+        private async Task<string> GenerateToken(User user )
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Role, user.RoleId.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));

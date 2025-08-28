@@ -2,6 +2,7 @@
 using LibraryManagementSystem.Domain.Interfaces.Services;
 using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -17,6 +18,7 @@ namespace LibraryManagementSystem.Controllers
 
         
         [HttpGet]
+        [Authorize]
         public async Task <IActionResult> All([FromQuery] BooksFilterRequest filter)
         {
             var books = await _bookService.GetBooksAsync(filter);
@@ -27,13 +29,16 @@ namespace LibraryManagementSystem.Controllers
         //create new book with author
         //Checked
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] BookCreateDto newBook)
         {
             await _bookService.CreateAsync(newBook);
             return Ok("Created!");
         }
+
         //checked
         [HttpPut("{bookIsbn}")]
+        [Authorize]
         public async Task<IActionResult> Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
         {
             
@@ -42,6 +47,7 @@ namespace LibraryManagementSystem.Controllers
 
         }
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateStatus(int bookIsbn , BookStatus status)
         {
             
@@ -49,6 +55,7 @@ namespace LibraryManagementSystem.Controllers
             return Ok("Book's status updated successfully.");
         }
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Borrow(int UserId, int BookIsbn)
         {
             
@@ -63,12 +70,14 @@ namespace LibraryManagementSystem.Controllers
             return Ok("Returned!");
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetMostBorrowed(int listSize)
         {
             
             return Ok(await _bookService.GetMostBorrowedAsync(listSize));
         }
         [HttpGet]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> GetBooksCountPerBranch()
         {
             

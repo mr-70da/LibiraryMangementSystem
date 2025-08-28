@@ -7,6 +7,7 @@ namespace LibraryManagementSystem.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class AuthorController : ControllerBase
     {
         private readonly IAuthorService _authorService;
@@ -18,7 +19,7 @@ namespace LibraryManagementSystem.Controllers
 
         //Create new auther
         [HttpPost]
-        [Authorize]
+        
         public async Task<IActionResult> Create([FromBody] AuthorCreateDto newAuthor)
         {
             await _authorService.CreateAsync(newAuthor);
