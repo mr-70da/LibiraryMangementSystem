@@ -62,6 +62,22 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
                Books = bookDto
            };
         }
+        /*create procedure SearchBookWithFilters
+	@Title varchar(200) = NULL,
+	@AuthorId int = NULL,
+	@BranchId int = NULL
+	as
+
+  begin 
+	SELECT *
+	FROM Book
+	WHERE (@Title is NULL or Title = @Title) 
+		AND (@AuthorId is NULL or AuthorId = @AuthorId) 
+		AND(@BranchId is NULL or BranchId = @BranchId)
+	end
+
+	exec SearchBookWithFilters @AuthorID = 1 , @BranchId = 1 ,@Title = '1984';
+         */
 
 
 
