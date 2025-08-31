@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Application.DTOs;
+﻿using System.Security.Claims;
+using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,10 +31,11 @@ namespace LibraryManagementSystem.APi.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "USER")]
-        public async Task<IActionResult> BorrowingHistory(int userId)
+        public async Task<IActionResult> BorrowingHistory()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             List<UserBorrowingHistoryDto>BorrowingHis;
-            BorrowingHis = await _userService.GetBorrowingHistoryAsync(userId);
+            BorrowingHis = await _userService.GetBorrowingHistoryAsync(int.Parse(userId));
             return Ok(BorrowingHis);
         }
     }

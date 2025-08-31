@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using LibraryManagementSystem.Domain.Interfaces.Services;
+﻿using System.Security.Claims;
 using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Domain.Enums;
+using LibraryManagementSystem.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -56,9 +57,10 @@ namespace LibraryManagementSystem.Controllers
         }
         [HttpPut]
         [Authorize(Roles = "USER")]
-        public async Task<IActionResult> Borrow(int UserId, int BookIsbn)
+        public async Task<IActionResult> Borrow( int BookIsbn)
         {
-            
+            var UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             await _bookService.BorrowAsync(UserId, BookIsbn);
             return Ok("Borrowed!");
         }

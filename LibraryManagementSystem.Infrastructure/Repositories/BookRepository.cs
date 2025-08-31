@@ -27,26 +27,27 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
             return returnedBooks;
         }
 
-        public async Task<IQueryable<Book>> GetFilteredBooksAsync
+        public async Task<List<Book>> GetFilteredBooksAsync
             (int? authorId, string? bookName, int? branchId)
         {
-            //var query = LibraryContext.Books.AsQueryable();
-            var query = LibraryContext.Books.
-                FromSqlRaw($"exec SearchBookWithFilters @AuthorID = {authorId} , @BranchId = {branchId}  ,@Title = {bookName} ;")
-                .AsQueryable();
+            //var query = await LibraryContext.Books.
+            //    FromSqlInterpolated($"exec SearchBookWithFilters @AuthorID ={authorId},@BranchId ={branchId},@Title ={bookName};")
+            //    .ToListAsync();
+            var query = LibraryContext.Books.AsQueryable();
             if (authorId.HasValue)
             {
                 query = query.Where(b => b.AuthorId == authorId.Value);
             }
-            if(!string.IsNullOrEmpty(bookName))
+            if (!string.IsNullOrEmpty(bookName))
             {
                 query = query.Where(b => b.Title.Contains(bookName));
             }
-            if(branchId.HasValue)
+            if (branchId.HasValue)
             {
                 query = query.Where(b => b.BranchId == branchId.Value);
             }
-            return query;
+            
+            return query.ToList();
         }
 
         public LibraryDbContext LibraryContext
