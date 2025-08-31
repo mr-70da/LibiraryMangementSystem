@@ -29,7 +29,7 @@ namespace LibraryManagementSystem.Controllers
         //create new book with author
         //Checked
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> Create([FromBody] BookCreateDto newBook)
         {
             await _bookService.CreateAsync(newBook);
@@ -38,7 +38,7 @@ namespace LibraryManagementSystem.Controllers
 
         //checked
         [HttpPut("{bookIsbn}")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
         {
             
@@ -47,7 +47,7 @@ namespace LibraryManagementSystem.Controllers
 
         }
         [HttpPut]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdateStatus(int bookIsbn , BookStatus status)
         {
             
@@ -55,7 +55,7 @@ namespace LibraryManagementSystem.Controllers
             return Ok("Book's status updated successfully.");
         }
         [HttpPut]
-        [Authorize]
+        [Authorize(Roles = "USER")]
         public async Task<IActionResult> Borrow(int UserId, int BookIsbn)
         {
             
@@ -63,6 +63,7 @@ namespace LibraryManagementSystem.Controllers
             return Ok("Borrowed!");
         }
         [HttpPut]
+        [Authorize(Roles = "USER")]
         public async Task<IActionResult> Return(int TransactionId)
         {
             
@@ -77,7 +78,7 @@ namespace LibraryManagementSystem.Controllers
             return Ok(await _bookService.GetMostBorrowedAsync(listSize));
         }
         [HttpGet]
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetBooksCountPerBranch()
         {
             

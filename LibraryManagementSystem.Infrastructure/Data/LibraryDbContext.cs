@@ -26,6 +26,8 @@ public partial class LibraryDbContext : DbContext
     public virtual DbSet<LibraryBranch> LibraryBranches { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Role> Roles { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=DefaultConnection");

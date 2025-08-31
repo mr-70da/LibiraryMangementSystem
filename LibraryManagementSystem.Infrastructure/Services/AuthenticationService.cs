@@ -57,6 +57,8 @@ namespace LibraryManagementSystem.Infrastructure.Services
                 throw new Exception("this email already exist.");
             }
             newUser.Password = BCrypt.Net.BCrypt.HashPassword(requestDto.Password);
+            newUser.RegistrationDate = DateOnly.FromDateTime(DateTime.Now);
+            
             await _unitOfWork.Users.AddAsync(newUser);
             await _unitOfWork.Complete();
             
@@ -72,11 +74,15 @@ namespace LibraryManagementSystem.Infrastructure.Services
         
         private async Task<string> GenerateToken(User user )
         {
+
+            var role =  await _unitOfWork.Users.GetRoleName(user.RoleId);
+       
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.RoleId.ToString())
+                
+                new Claim(ClaimTypes.Role, role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));

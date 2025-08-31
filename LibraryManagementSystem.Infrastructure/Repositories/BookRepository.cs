@@ -30,8 +30,11 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
         public async Task<IQueryable<Book>> GetFilteredBooksAsync
             (int? authorId, string? bookName, int? branchId)
         {
-            var query = LibraryContext.Books.AsQueryable();
-            if(authorId.HasValue)
+            //var query = LibraryContext.Books.AsQueryable();
+            var query = LibraryContext.Books.
+                FromSqlRaw($"exec SearchBookWithFilters @AuthorID = {authorId} , @BranchId = {branchId}  ,@Title = {bookName} ;")
+                .AsQueryable();
+            if (authorId.HasValue)
             {
                 query = query.Where(b => b.AuthorId == authorId.Value);
             }

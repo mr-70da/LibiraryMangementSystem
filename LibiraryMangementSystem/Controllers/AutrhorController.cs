@@ -7,7 +7,7 @@ namespace LibraryManagementSystem.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "ADMIN")]
     public class AuthorController : ControllerBase
     {
         private readonly IAuthorService _authorService;
