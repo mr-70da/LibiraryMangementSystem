@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
+using LibraryManagementSystem.API.Queries;
 using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Application.Services.Interface;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,15 +13,16 @@ namespace LibraryManagementSystem.APi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly IMediator _mediator;
+        public UserController(IMediator mediator) 
         {
-            _userService = userService;
+            _mediator = mediator;
         }
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> Create([FromBody] UserCreateDto user)
         {
+
             await _userService.CreateAsync(user);
             return Ok(await _userService.CreateAsync(user));
         }
@@ -27,7 +30,9 @@ namespace LibraryManagementSystem.APi.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _userService.GetAllAsync());
+            var query = new GetAllUsersQuery();
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
         [HttpGet]
         [Authorize(Roles = "USER")]

@@ -35,31 +35,7 @@ namespace LibraryManagementSystem.Application.Services.Implementations
             }
         }
 
-        public async Task<GeneralResponse <List<UserReadDto>>> GetAllAsync()
-        {
-            try
-            {
-                GeneralResponse<List<UserReadDto>> response;
-
-                var users = await _unitOfWork.Users.GetAllAsync();
-                if (users == null)
-                {
-                    response = new GeneralResponse<List<UserReadDto>>
-                        (null, false, "No users found.", System.Net.HttpStatusCode.NotFound);
-                    return response;
-                }
-                response = new GeneralResponse<List<UserReadDto>>
-                    (_mapper.Map<List<UserReadDto>>(users),
-                    true, "Users retrieved successfully.", System.Net.HttpStatusCode.OK);
-                return response;
-       
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
+     
         public async Task<GeneralResponse<List<UserBorrowingHistoryDto>>> GetBorrowingHistoryAsync(int userId)
         {
             try

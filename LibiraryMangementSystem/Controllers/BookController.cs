@@ -2,6 +2,7 @@
 using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Application.Services.Interface;
 using LibraryManagementSystem.Domain.Enums;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +13,11 @@ namespace LibraryManagementSystem.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
-        public BookController(IBookService service)
+        private readonly IMediator _mediator;
+        public BookController(IBookService service , IMediator mediator)
         {
             _bookService = service;
+            _mediator = mediator;
         }
 
         
