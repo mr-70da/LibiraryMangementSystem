@@ -1,5 +1,7 @@
-﻿using LibraryManagementSystem.Application.DTOs;
-using LibraryManagementSystem.Application.Services.Interface;
+﻿
+using LibraryManagementSystem.Application.Commands.Authentications;
+using LibraryManagementSystem.Application.DTOs;
+
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,19 +14,19 @@ namespace LibraryManagementSystem.API.Controllers
     public class AuthenticationController : ControllerBase
     {
         
-        private readonly IAuthenticationService _authenticationService;
+        
         private readonly IMediator _mediator;
-        public AuthenticationController(IAuthenticationService authenticationService ,IMediator mediator)
+        public AuthenticationController(IMediator mediator)
         {
             _mediator = mediator;
-            _authenticationService = authenticationService;
+            
         }
 
         [HttpPost]
         public async Task<ActionResult<LoginResponseDto>> Login(LoginRequestDto request)
         {
 
-            var response = await _authenticationService.Login(request);
+            var response = await _mediator.Send(new LoginCommand(request));
             return Ok(response);
            
         }
@@ -33,8 +35,8 @@ namespace LibraryManagementSystem.API.Controllers
         public async Task<ActionResult<LoginResponseDto>> Register(RegisterRequestDto request)
         {
 
-            
-            return Ok(await _authenticationService.Register(request));
+            var response = await _mediator.Send(new RegisterCommand(request));
+            return Ok(request);
         }
 
     }

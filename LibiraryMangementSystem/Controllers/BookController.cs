@@ -1,7 +1,7 @@
-﻿using System.Security.Claims;
+﻿
+using LibraryManagementSystem.Application.Commands.Books;
 using LibraryManagementSystem.Application.DTOs;
-using LibraryManagementSystem.Application.Services.Interface;
-using LibraryManagementSystem.Domain.Enums;
+using LibraryManagementSystem.Application.Queries.Books;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,21 +12,35 @@ namespace LibraryManagementSystem.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly IBookService _bookService;
+        
         private readonly IMediator _mediator;
-        public BookController(IBookService service , IMediator mediator)
+        public BookController( IMediator mediator)
         {
-            _bookService = service;
+            
             _mediator = mediator;
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetMostBorrowed(int listSize)
+        {
+            
+            return Ok(await _mediator.Send(new GetMostBorrowedBooksQuery(listSize)));
+        }
+        [HttpGet]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> GetBooksCountPerBranch()
+        {
+            
+            return Ok(await _mediator.Send(new GetBooksCountPerBranchQuery()));
+        }
         
         [HttpGet]
         [Authorize]
         public async Task <IActionResult> All([FromQuery] BooksFilterRequest filter)
         {
-            var books = await _bookService.GetBooksAsync(filter);
-            return Ok(books);
+           
+            return Ok(await _mediator.Send(new GetAllBooksQuery(filter)));
             
         }
 
@@ -36,7 +50,7 @@ namespace LibraryManagementSystem.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> Create([FromBody] BookCreateDto newBook)
         {
-            return Ok(await _bookService.CreateAsync(newBook));
+            return Ok(await _mediator.Send(new CreateBookCommand(newBook)));
         }
 
 
@@ -45,40 +59,26 @@ namespace LibraryManagementSystem.Controllers
         public async Task<IActionResult> Update(BookUpdateRequestDto bookUpdate)
 
         {
-            return Ok(await _bookService.UpdateAsync(bookUpdate));
+            return Ok(await _mediator.Send(new UpdateBookCommand(bookUpdate)));
 
         }
         [HttpPut]
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdateStatus(BookStatusUpdateDto updateDto)
         {            
-            return Ok(await _bookService.UpdateStatusAsync(updateDto));
+            return Ok(await _mediator.Send(new UpdateBookStatusCommand(updateDto)));
         }
         [HttpPost]
         [Authorize(Roles = "USER")]
         public async Task<IActionResult> Borrow(BorrowRequestDto borrowRequest)
         {
-            return Ok(await _bookService.BorrowAsync(borrowRequest));
+            return Ok(await _mediator.Send(new BorrowBookCommand(borrowRequest)));
         }
         [HttpPut]
         [Authorize(Roles = "USER")]
         public async Task<IActionResult> Return(int TransactionId)
         {
-            return Ok(await _bookService.ReturnAsync(TransactionId));
-        }
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetMostBorrowed(int listSize)
-        {
-            
-            return Ok(await _bookService.GetMostBorrowedAsync(listSize));
-        }
-        [HttpGet]
-        [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> GetBooksCountPerBranch()
-        {
-            
-            return Ok(await _bookService.GetBooksCountPerBranchAsync());
+            return Ok(await _mediator.Send(new ReturnBookCommand(TransactionId)));
         }
 
     }

@@ -1,5 +1,6 @@
-﻿using LibraryManagementSystem.Application.DTOs;
-using LibraryManagementSystem.Application.Services.Interface;
+﻿using LibraryManagementSystem.Application.Commands.Authors;
+using LibraryManagementSystem.Application.DTOs;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,11 @@ namespace LibraryManagementSystem.Controllers
     [Authorize(Roles = "ADMIN")]
     public class AuthorController : ControllerBase
     {
-        private readonly IAuthorService _authorService;
-        
-        public AuthorController(IAuthorService authorService)
+        private readonly IMediator _mediator;
+
+        public AuthorController(IMediator mediator)
         {
-            _authorService = authorService;
+            _mediator = mediator;
         }
 
         //Create new auther
@@ -22,18 +23,19 @@ namespace LibraryManagementSystem.Controllers
         
         public async Task<IActionResult> Create([FromBody] AuthorCreateDto newAuthor)
         {
-            return Ok(await _authorService.CreateAsync(newAuthor));
+
+            return Ok(await _mediator.Send(new CreateAuthorCommand(newAuthor)));
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int authorId)
         {            
-            return Ok(await _authorService.DeleteAsync(authorId));
+            return Ok(await _mediator.Send(new DeleteAuthorCommand(authorId)));
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(AuthorUpdateRequestDto requestDto)
         {
-             return Ok(await _authorService.UpdateAsync(requestDto));
+             return Ok(await _mediator.Send(new UpdateAuthorCommand(requestDto)));
         }
     }
 }

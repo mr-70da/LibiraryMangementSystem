@@ -16,4 +16,8 @@
     <ProjectReference Include="..\LibraryManagementSystem.Presentation\LibraryManagementSystem.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="StoredProcedures\" />
+  </ItemGroup>
+
 </Project>

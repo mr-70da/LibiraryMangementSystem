@@ -1,7 +1,5 @@
-﻿
+﻿using System.Reflection;
 using System.Text;
-using LibraryManagementSystem.Application.Services.Implementations;
-using LibraryManagementSystem.Application.Services.Interface;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using LibraryManagementSystem.Infrastructure.Data;
@@ -14,35 +12,33 @@ using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
-//Repo
+
+#region Services DI
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<IBorrowingRepository, BorrowingRepository>();
-
-
-
-//unit of work
-
+#endregion
+#region Unit of Work DI
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-// Add services to the container
+#endregion
+#region Controller DI
 builder.Services.AddControllers();
-//add mappers
-// Replace the incorrect AddAutoMapper line with the correct usage
+#endregion
+#region Auto Mapper DI
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-// services
-builder.Services.AddScoped<IAuthorService, AuthorService>();
-builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+#endregion
+#region Database DI
 builder.Services.AddDbContext<LibraryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefualtConnection")));
-
-builder.Services.AddMediatR(config=> config.RegisterServicesFromAssembly(typeof(Program).Assembly));
-
-builder.Services.AddEndpointsApiExplorer();
+#endregion
+#region MediatR DI
+builder.Services.AddMediatR(config =>
+    config.RegisterServicesFromAssembly(Assembly.Load("LibraryManagementSystem.Application")));
+#endregion
+#region Swagger Token
 builder.Services.AddSwaggerGen(options =>
 {
     var jwtSecurityScheme = new OpenApiSecurityScheme
@@ -73,7 +69,8 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-
+#endregion
+#region Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -92,7 +89,8 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
         };
     });
-
+#endregion
+builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

@@ -1,10 +1,11 @@
 ﻿using System.Security.Claims;
 using LibraryManagementSystem.API.Queries;
+using LibraryManagementSystem.Application.Commands.Users;
 using LibraryManagementSystem.Application.DTOs;
-using LibraryManagementSystem.Application.Services.Interface;
+using LibraryManagementSystem.Application.Queries.Books;
+using LibraryManagementSystem.Application.Queries.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementSystem.APi.Controllers
@@ -22,9 +23,7 @@ namespace LibraryManagementSystem.APi.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> Create([FromBody] UserCreateDto user)
         {
-
-            await _userService.CreateAsync(user);
-            return Ok(await _userService.CreateAsync(user));
+            return Ok(await _mediator.Send(new CreateUserCommand(user)));
         }
         [HttpGet]
         [Authorize(Roles = "ADMIN")]
@@ -39,8 +38,8 @@ namespace LibraryManagementSystem.APi.Controllers
         public async Task<IActionResult> BorrowingHistory()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
-            return Ok(await _userService.GetBorrowingHistoryAsync(int.Parse(userId)));
+            var query = new GetUserBorrowingHistoryQuery(int.Parse(userId));
+            return Ok(_mediator.Send(query));
         }
     }
 }
