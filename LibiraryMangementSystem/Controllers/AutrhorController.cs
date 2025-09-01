@@ -25,7 +25,7 @@ namespace LibraryManagementSystem.Controllers
             await _authorService.CreateAsync(newAuthor);
             return Ok("Created!");
         }
-        [HttpDelete()]
+        [HttpDelete]
         public async Task<IActionResult> Delete(int authorId)
         {
             
@@ -34,11 +34,11 @@ namespace LibraryManagementSystem.Controllers
             return Ok("Author deleted successfully.");
         }
 
-        [HttpPut()]
-        public async Task<IActionResult> Update(int authorId, [FromBody] AuthorCreateDto updatedAuthor)
+        [HttpPut]
+        public async Task<IActionResult> Update(AuthorUpdateRequestDto requestDto)
         {
             
-             await _authorService.UpdateAsync(authorId, updatedAuthor);
+             await _authorService.UpdateAsync(requestDto);
              return Ok("Updated");
         }
     }

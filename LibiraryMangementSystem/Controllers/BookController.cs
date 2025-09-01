@@ -37,29 +37,29 @@ namespace LibraryManagementSystem.Controllers
         }
 
         //checked
-        [HttpPut("{bookIsbn}")]
+        [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
+        public async Task<IActionResult> Update(BookUpdateRequestDto bookUpdate)
         {
             
-            await _bookService.UpdateAsync(bookIsbn, updatedBook);
+            await _bookService.UpdateAsync(bookUpdate);
             return Ok("Updated!");
 
         }
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> UpdateStatus(int bookIsbn , BookStatus status)
+        public async Task<IActionResult> UpdateStatus(BookStatusUpdateDto updateDto )
         {
             
-            await _bookService.UpdateStatusAsync(bookIsbn, status);
+            await _bookService.UpdateStatusAsync(updateDto);
             return Ok("Book's status updated successfully.");
         }
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Borrow(int UserId, int BookIsbn)
+        public async Task<IActionResult> Borrow(BorrowRequestDto borrowRequest)
         {
             
-            await _bookService.BorrowAsync(UserId, BookIsbn);
+            await _bookService.BorrowAsync(borrowRequest);
             return Ok("Borrowed!");
         }
         [HttpPut]

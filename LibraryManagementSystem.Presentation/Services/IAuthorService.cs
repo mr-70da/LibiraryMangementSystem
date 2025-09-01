@@ -9,6 +9,6 @@ namespace LibraryManagementSystem.Domain.Interfaces.Services
         public Task CreateAsync(AuthorCreateDto dto);
         public Task<AuthorReadDto> GetAsync(int id);
         public Task DeleteAsync(int id);
-        public Task UpdateAsync(int id,AuthorCreateDto dto);
+        public Task UpdateAsync(AuthorUpdateRequestDto UpdatedAuthorDto);
     }
 }

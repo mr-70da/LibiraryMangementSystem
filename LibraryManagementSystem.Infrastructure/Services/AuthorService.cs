@@ -52,15 +52,15 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
             return _mapper.Map<AuthorReadDto>(author);
         }
         //Checked
-        public async Task UpdateAsync(int id, AuthorCreateDto dto)
+        public async Task UpdateAsync(AuthorUpdateRequestDto updateAuthorDto)
         {
-            if (await _unitOfWork.Authors.GetByIdAsync(id) == null)
+            if (await _unitOfWork.Authors.GetByIdAsync(updateAuthorDto.Id) == null)
             {
                 throw new KeyNotFoundException("Author not found"); 
             }
 
-            Author updatedAuthor =  _mapper.Map<Author>(dto);
-            updatedAuthor.Id = id;
+            Author updatedAuthor =  _mapper.Map<Author>(updateAuthorDto);
+            
             _unitOfWork.Authors.Update(updatedAuthor);
             await _unitOfWork.Complete();
         }

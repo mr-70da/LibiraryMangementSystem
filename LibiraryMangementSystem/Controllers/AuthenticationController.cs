@@ -1,10 +1,9 @@
 ﻿using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Application.Services;
-using LibraryManagementSystem.Infrastructure.Data;
-using LibraryManagementSystem.Infrastructure.Services;
+
 using Microsoft.AspNetCore.Mvc;
 
-using Microsoft.EntityFrameworkCore;
+
 
 namespace LibraryManagementSystem.API.Controllers
 {

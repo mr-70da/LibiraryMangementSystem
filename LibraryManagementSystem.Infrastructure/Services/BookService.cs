@@ -81,14 +81,13 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
 
 
 
-        public async Task UpdateAsync(int id , BookCreateDto newBookDto)
+        public async Task UpdateAsync(BookUpdateRequestDto newBookDto)
         {
-            if (await _unitOfWork.Books.GetByIdAsync(id) == null)
+            if (await _unitOfWork.Books.GetByIdAsync(newBookDto.Isbn) == null)
             {
                 throw new KeyNotFoundException("Book not found");
             }
             var newBook = _mapper.Map<Book>(newBookDto);
-            newBook.Isbn = id;
             _unitOfWork.Books.Update( newBook);
             await _unitOfWork.Complete(); 
         }
@@ -124,14 +123,14 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
 
             return result;
         }
-        public async Task UpdateStatusAsync(int bookIsbn , BookStatus newStatus)
+        public async Task UpdateStatusAsync(BookStatusUpdateDto updateDto)
         {
-            var book = await _unitOfWork.Books.GetByIdAsync(bookIsbn);
+            var book = await _unitOfWork.Books.GetByIdAsync(updateDto.BookIsbn);
             if (book == null)
             {
                 throw new KeyNotFoundException("Book not found");
             }
-            book.Status = newStatus;
+            book.Status = updateDto.BookStatus;
             _unitOfWork.Books.Update(book);
             
             await _unitOfWork.Complete();
@@ -165,18 +164,18 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
             }
             return true;
         }
-        public async Task BorrowAsync(int UserId, int BookIsbn)
+        public async Task BorrowAsync(BorrowRequestDto requestDto)
         {
-            if(UserId == null || BookIsbn == null){
+            if(requestDto.UserId == null || requestDto.BookIsbn == null){
                 throw new ArgumentNullException("User id and book ISBN should be specified");
 
             }
-            var user = await _unitOfWork.Users.GetByIdAsync(UserId);
+            var user = await _unitOfWork.Users.GetByIdAsync(requestDto.UserId);
             if (user == null)
             {
                 throw new KeyNotFoundException("User not found");
             }
-            var book = await _unitOfWork.Books.GetByIdAsync(BookIsbn);
+            var book = await _unitOfWork.Books.GetByIdAsync(requestDto.BookIsbn);
             if (book == null)
             {
                 throw new KeyNotFoundException("Book not found");
@@ -188,8 +187,8 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
                 book.Status = BookStatus.Borrowed;
                 _unitOfWork.Books.Update(book);
                 
-                borrowingHistory.UserId = UserId;
-                borrowingHistory.BookId = BookIsbn;
+                borrowingHistory.UserId = requestDto.UserId;
+                borrowingHistory.BookId = requestDto.BookIsbn;
                 borrowingHistory.BorrowDate =
                     DateOnly.FromDateTime(DateTime.Now);
                 await _unitOfWork.Borrowings.AddAsync(borrowingHistory);
