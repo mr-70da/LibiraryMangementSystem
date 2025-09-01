@@ -37,50 +37,29 @@ namespace LibraryManagementSystem.Controllers
             return Ok("Created!");
         }
 
-        //checked
-<<<<<<< HEAD
+
         [HttpPut]
-        [Authorize]
-        public async Task<IActionResult> Update(BookUpdateRequestDto bookUpdate)
-=======
-        [HttpPut("{bookIsbn}")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> Update(int bookIsbn, [FromBody] BookCreateDto updatedBook)
->>>>>>> d0b598716e02cf3ad6d828b93099f678388ebf08
+        public async Task<IActionResult> Update(BookUpdateRequestDto bookUpdate)
+
         {
             
             await _bookService.UpdateAsync(bookUpdate);
             return Ok("Updated!");
 
         }
-        [HttpPut]
-<<<<<<< HEAD
-        [Authorize]
-        public async Task<IActionResult> UpdateStatus(BookStatusUpdateDto updateDto )
-=======
-        [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> UpdateStatus(int bookIsbn , BookStatus status)
->>>>>>> d0b598716e02cf3ad6d828b93099f678388ebf08
+        public async Task<IActionResult> UpdateStatus(BookStatusUpdateDto updateDto)
         {
             
             await _bookService.UpdateStatusAsync(updateDto);
             return Ok("Book's status updated successfully.");
         }
-        [HttpPut]
-<<<<<<< HEAD
-        [Authorize]
+        [HttpPost]
+        [Authorize(Roles = "USER")]
         public async Task<IActionResult> Borrow(BorrowRequestDto borrowRequest)
         {
-            
+            //add user id from token to borrow request
             await _bookService.BorrowAsync(borrowRequest);
-=======
-        [Authorize(Roles = "USER")]
-        public async Task<IActionResult> Borrow( int BookIsbn)
-        {
-            var UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            await _bookService.BorrowAsync(UserId, BookIsbn);
->>>>>>> d0b598716e02cf3ad6d828b93099f678388ebf08
             return Ok("Borrowed!");
         }
         [HttpPut]
