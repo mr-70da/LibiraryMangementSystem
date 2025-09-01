@@ -1,6 +1,5 @@
 ﻿using LibraryManagementSystem.Application.DTOs;
-using LibraryManagementSystem.Application.Services;
-
+using LibraryManagementSystem.Application.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -23,10 +22,6 @@ namespace LibraryManagementSystem.API.Controllers
         public async Task<ActionResult<LoginResponseDto>> Login(LoginRequestDto request)
         {
             var response = await _authenticationService.Login(request);
-            if (response == null)
-            {
-                return Unauthorized("Invalid email or password.");
-            }
             return Ok(response);
            
         }

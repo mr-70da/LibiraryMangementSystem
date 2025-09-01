@@ -1,5 +1,5 @@
 ﻿using LibraryManagementSystem.Application.DTOs;
-using LibraryManagementSystem.Domain.Interfaces.Services;
+using LibraryManagementSystem.Application.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,24 +22,18 @@ namespace LibraryManagementSystem.Controllers
         
         public async Task<IActionResult> Create([FromBody] AuthorCreateDto newAuthor)
         {
-            await _authorService.CreateAsync(newAuthor);
-            return Ok("Created!");
+            return Ok(await _authorService.CreateAsync(newAuthor));
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int authorId)
-        {
-            
-            await _authorService.DeleteAsync(authorId);
-       
-            return Ok("Author deleted successfully.");
+        {            
+            return Ok(await _authorService.DeleteAsync(authorId));
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(AuthorUpdateRequestDto requestDto)
         {
-            
-             await _authorService.UpdateAsync(requestDto);
-             return Ok("Updated");
+             return Ok(await _authorService.UpdateAsync(requestDto));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using LibraryManagementSystem.Application.DTOs;
-using LibraryManagementSystem.Application.Services;
+using LibraryManagementSystem.Application.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,7 @@ namespace LibraryManagementSystem.APi.Controllers
         public async Task<IActionResult> Create([FromBody] UserCreateDto user)
         {
             await _userService.CreateAsync(user);
-            return Ok("User created successfully.");
+            return Ok(await _userService.CreateAsync(user));
         }
         [HttpGet]
         [Authorize(Roles = "ADMIN")]
@@ -34,9 +34,8 @@ namespace LibraryManagementSystem.APi.Controllers
         public async Task<IActionResult> BorrowingHistory()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            List<UserBorrowingHistoryDto>BorrowingHis;
-            BorrowingHis = await _userService.GetBorrowingHistoryAsync(int.Parse(userId));
-            return Ok(BorrowingHis);
+            
+            return Ok(await _userService.GetBorrowingHistoryAsync(int.Parse(userId)));
         }
     }
 }

@@ -1,15 +1,11 @@
 ﻿
 using System.Text;
-
-using LibraryManagementSystem.Application.Interfaces.Services;
-using LibraryManagementSystem.Application.Services;
+using LibraryManagementSystem.Application.Services.Implementations;
+using LibraryManagementSystem.Application.Services.Interface;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
-using LibraryManagementSystem.Domain.Interfaces.Services;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using LibraryManagementSystem.Infrastructure.Data;
 using LibraryManagementSystem.Infrastructure.Repositories;
-
-using LibraryManagementSystem.Infrastructure.Services;
 using LibraryManagementSystem.Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

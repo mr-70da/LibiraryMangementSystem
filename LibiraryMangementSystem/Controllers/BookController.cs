@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using LibraryManagementSystem.Application.DTOs;
+using LibraryManagementSystem.Application.Services.Interface;
 using LibraryManagementSystem.Domain.Enums;
-using LibraryManagementSystem.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,8 +33,7 @@ namespace LibraryManagementSystem.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> Create([FromBody] BookCreateDto newBook)
         {
-            await _bookService.CreateAsync(newBook);
-            return Ok("Created!");
+            return Ok(await _bookService.CreateAsync(newBook));
         }
 
 
@@ -43,32 +42,26 @@ namespace LibraryManagementSystem.Controllers
         public async Task<IActionResult> Update(BookUpdateRequestDto bookUpdate)
 
         {
-            
-            await _bookService.UpdateAsync(bookUpdate);
-            return Ok("Updated!");
+            return Ok(await _bookService.UpdateAsync(bookUpdate));
 
         }
+        [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdateStatus(BookStatusUpdateDto updateDto)
-        {
-            
-            await _bookService.UpdateStatusAsync(updateDto);
-            return Ok("Book's status updated successfully.");
+        {            
+            return Ok(await _bookService.UpdateStatusAsync(updateDto));
         }
         [HttpPost]
         [Authorize(Roles = "USER")]
         public async Task<IActionResult> Borrow(BorrowRequestDto borrowRequest)
         {
-            //add user id from token to borrow request
-            await _bookService.BorrowAsync(borrowRequest);
-            return Ok("Borrowed!");
+            return Ok(await _bookService.BorrowAsync(borrowRequest));
         }
         [HttpPut]
         [Authorize(Roles = "USER")]
         public async Task<IActionResult> Return(int TransactionId)
         {
-            
-            await _bookService.ReturnAsync(TransactionId);
-            return Ok("Returned!");
+            return Ok(await _bookService.ReturnAsync(TransactionId));
         }
         [HttpGet]
         [Authorize]
