@@ -45,6 +45,7 @@ namespace LibraryManagementSystem.Application.Interfaces.Services
         {
             var query = await _unitOfWork.Books.GetFilteredBooksAsync(
                 filter.AuthorId, filter.BookName, filter.BranchId);
+            
 
             int totalBooks = query.Count();
 

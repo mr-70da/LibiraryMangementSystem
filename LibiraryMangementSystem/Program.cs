@@ -64,10 +64,10 @@ builder.Services.AddSwaggerGen(options =>
         }
     };
 
-    // ✅ Register the scheme
+    
     options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
 
-    // ✅ Apply scheme globally to all endpoints
+    
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {

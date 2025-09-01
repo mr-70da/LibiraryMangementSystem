@@ -23,6 +23,12 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
+        public async Task<String> GetRoleName(int roleId)
+        {
+            var name = await  _context.Users.Where(u => u.RoleId == roleId).
+                Join(_context.Roles, u => u.RoleId, r => r.Id, (u, r) => r.Name).FirstOrDefaultAsync();
+            return name;
+        }
 
 
     }
