@@ -1,9 +1,9 @@
 ﻿
 namespace LibraryManagementSystem.Application.DTOs
 {
-    public class BooksPerBranchDto
+    public class BooksPerBranchResponse
     {
-        public BooksPerBranchDto(int id, String name, int count) {
+        public BooksPerBranchResponse(int id, String name, int count) {
             BranchId = id; BranchName = name; BookCount = count;
         }
         public int BranchId { get; set; }

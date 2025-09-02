@@ -1,46 +1,52 @@
 ﻿using AutoMapper;
-using LibraryManagementSystem.API.Queries;
 using LibraryManagementSystem.Application.DTOs;
+using LibraryManagementSystem.Application.Queries.Users;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using Microsoft.Extensions.Logging;
 //done
 namespace LibraryManagementSystem.Application.Handlers.Authors
 {
-    public class GetAllUsersHandler : IRequestHandler<GetAllUsersQuery, GeneralResponse<List<UserReadDto>>>
+    public class GetAllUsersHandler : IRequestHandler<GetAllUsersQuery, GeneralResponse<List<UserReadResponse>>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public GetAllUsersHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly ILogger<GetAllUsersHandler> _logger;
+        public GetAllUsersHandler(IUnitOfWork unitOfWork, IMapper mapper , ILogger<GetAllUsersHandler> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
-        public async Task<GeneralResponse<List<UserReadDto>>> 
+        public async Task<GeneralResponse<List<UserReadResponse>>> 
             Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                GeneralResponse<List<UserReadDto>> response;
+                GeneralResponse<List<UserReadResponse>> response;
 
 
                 var users = await _unitOfWork.Users.GetAllAsync();
                 if (users == null)
                 {
-                    response = new GeneralResponse<List<UserReadDto>>
+                    _logger.LogWarning("No users found in the system.");
+                    response = new GeneralResponse<List<UserReadResponse>>
                         (null, false, "No users found.", System.Net.HttpStatusCode.NotFound);
                     return response;
                 }
-                response = new GeneralResponse<List<UserReadDto>>
-                    (_mapper.Map<List<UserReadDto>>(users),
+                response = new GeneralResponse<List<UserReadResponse>>
+                    (_mapper.Map<List<UserReadResponse>>(users),
                     true, "Users retrieved successfully.", System.Net.HttpStatusCode.OK);
+                _logger.LogInformation("Users retrieved successfully.");
                 return response;
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while retrieving users.");
                 throw new Exception(ex.Message);
             }
         }

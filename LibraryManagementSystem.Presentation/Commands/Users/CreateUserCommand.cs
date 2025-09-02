@@ -8,13 +8,17 @@ using MediatR;
 
 namespace LibraryManagementSystem.Application.Commands.Users
 {
-    public class CreateUserCommand : IRequest<GeneralResponse<UserReadDto>>
+    public class CreateUserCommand : IRequest<GeneralResponse<UserReadResponse>>
     {
-        
-        public UserCreateDto CreateUserDto { get; }
-        public CreateUserCommand(UserCreateDto createUserDto)
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+
+        public CreateUserCommand(string firstName, string lastName, string email)
         {
-            CreateUserDto = createUserDto;
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
         }
     }
 }

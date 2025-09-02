@@ -1,15 +1,18 @@
-﻿using MediatR;
-using LibraryManagementSystem.Application.DTOs;
+﻿using LibraryManagementSystem.Application.DTOs;
+using LibraryManagementSystem.Domain.Enums;
+using MediatR;
 
 namespace LibraryManagementSystem.Application.Commands.Books
 {
-    public class UpdateBookStatusCommand : IRequest<GeneralResponse<BookReadDto>>
+    public class UpdateBookStatusCommand : IRequest<GeneralResponse<BookReadResponse>>
     {
-        public BookStatusUpdateDto UpdateDto { get; set; }
+        public int BookIsbn { get; set; }
+        public BookStatus BookStatus { get; set; }
 
-        public UpdateBookStatusCommand(BookStatusUpdateDto updateDto)
+        public UpdateBookStatusCommand(int bookIsbn, BookStatus bookStatus)
         {
-            UpdateDto = updateDto;
+            BookIsbn = bookIsbn;
+            BookStatus = bookStatus;
         }
     }
 }

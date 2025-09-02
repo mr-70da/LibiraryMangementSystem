@@ -37,10 +37,10 @@ namespace LibraryManagementSystem.Controllers
         
         [HttpGet]
         [Authorize]
-        public async Task <IActionResult> All([FromQuery] BooksFilterRequest filter)
+        public async Task <IActionResult> All([FromQuery] GetAllBooksQuery filter)
         {
            
-            return Ok(await _mediator.Send(new GetAllBooksQuery(filter)));
+            return Ok(await _mediator.Send(filter));
             
         }
 
@@ -48,31 +48,31 @@ namespace LibraryManagementSystem.Controllers
         //Checked
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> Create([FromBody] BookCreateDto newBook)
+        public async Task<IActionResult> Create([FromBody] CreateBookCommand  newBook)
         {
-            return Ok(await _mediator.Send(new CreateBookCommand(newBook)));
+            return Ok(await _mediator.Send(newBook));
         }
 
 
         [HttpPut]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> Update(BookUpdateRequestDto bookUpdate)
+        public async Task<IActionResult> Update(UpdateBookCommand bookUpdate)
 
         {
-            return Ok(await _mediator.Send(new UpdateBookCommand(bookUpdate)));
+            return Ok(await _mediator.Send(bookUpdate));
 
         }
         [HttpPut]
         [Authorize(Roles = "ADMIN")]
-        public async Task<IActionResult> UpdateStatus(BookStatusUpdateDto updateDto)
+        public async Task<IActionResult> UpdateStatus(UpdateBookStatusCommand updateDto)
         {            
-            return Ok(await _mediator.Send(new UpdateBookStatusCommand(updateDto)));
+            return Ok(await _mediator.Send(updateDto));
         }
         [HttpPost]
         [Authorize(Roles = "USER")]
-        public async Task<IActionResult> Borrow(BorrowRequestDto borrowRequest)
+        public async Task<IActionResult> Borrow(BorrowBookCommand borrowRequest)
         {
-            return Ok(await _mediator.Send(new BorrowBookCommand(borrowRequest)));
+            return Ok(await _mediator.Send(borrowRequest));
         }
         [HttpPut]
         [Authorize(Roles = "USER")]

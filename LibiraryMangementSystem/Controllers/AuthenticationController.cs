@@ -23,19 +23,19 @@ namespace LibraryManagementSystem.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<LoginResponseDto>> Login(LoginRequestDto request)
+        public async Task<ActionResult<LoginResponse>> Login(LoginCommand request)
         {
 
-            var response = await _mediator.Send(new LoginCommand(request));
+            var response = await _mediator.Send(request);
             return Ok(response);
            
         }
 
         [HttpPost]
-        public async Task<ActionResult<LoginResponseDto>> Register(RegisterRequestDto request)
+        public async Task<ActionResult<LoginResponse>> Register(RegisterCommand request)
         {
 
-            var response = await _mediator.Send(new RegisterCommand(request));
+            var response = await _mediator.Send(request);
             return Ok(request);
         }
 

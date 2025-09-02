@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
-using LibraryManagementSystem.Domain.Interfaces.Repositories;
+﻿using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using LibraryManagementSystem.Infrastructure.Data;
 using LibraryManagementSystem.Infrastructure.Repositories;
@@ -9,6 +7,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using System.Reflection;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +29,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddControllers();
 #endregion
 #region Auto Mapper DI
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(Assembly.Load("LibraryManagementSystem.Application"));
 #endregion
 #region Database DI
 builder.Services.AddDbContext<LibraryDbContext>(options =>
@@ -90,8 +91,17 @@ builder.Services.AddAuthentication(options =>
         };
     });
 #endregion
+
+
 builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
+#region Seeding
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<LibraryDbContext>();
+    db.Database.Migrate();
+}
+#endregion
 
 if (app.Environment.IsDevelopment())
 {

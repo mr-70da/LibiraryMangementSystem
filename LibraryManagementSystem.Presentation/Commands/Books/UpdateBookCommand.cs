@@ -3,13 +3,15 @@ using LibraryManagementSystem.Application.DTOs;
 
 namespace LibraryManagementSystem.Application.Commands.Books
 {
-    public class UpdateBookCommand : IRequest<GeneralResponse<BookReadDto>>
+    public class UpdateBookCommand : IRequest<GeneralResponse<BookReadResponse>>
     {
-        public BookUpdateRequestDto BookDto { get; set; }
+        public int Isbn { get; set; }
+        public int AuthorId { get; set; }
 
-        public UpdateBookCommand(BookUpdateRequestDto bookDto)
+        public UpdateBookCommand(int isbn, int authorId)
         {
-            BookDto = bookDto;
+            Isbn = isbn;
+            AuthorId = authorId;
         }
     }
 }

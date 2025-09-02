@@ -30,7 +30,41 @@ public partial class LibraryDbContext : DbContext
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
+    => optionsBuilder
+        .UseSqlServer("Name=DefaultConnection")
+        .UseSeeding((context, _) =>
+        {
+            
+            if (!context.Set<Role>().Any(r => r.Name == "USER"))
+            {
+                context.Set<Role>().Add(new Role { Name = "USER" });
+            }
+
+            
+            if (!context.Set<Role>().Any(r => r.Name == "ADMIN"))
+            {
+                context.Set<Role>().Add(new Role { Name = "ADMIN" });
+            }
+
+            context.SaveChanges();
+        })
+        .UseAsyncSeeding(async (context, _, cancellationToken) =>
+        {
+            if (!await context.Set<Role>().AnyAsync(r => r.Name == "USER", cancellationToken))
+            {
+                context.Set<Role>().Add(new Role { Name = "USER" });
+            }
+
+            if (!await context.Set<Role>().AnyAsync(r => r.Name == "ADMIN", cancellationToken))
+            {
+                context.Set<Role>().Add(new Role { Name = "ADMIN" });
+            }
+            
+
+            await context.SaveChangesAsync(cancellationToken);
+        });
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

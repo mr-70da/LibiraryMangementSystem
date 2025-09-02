@@ -10,28 +10,33 @@ using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace LibraryManagementSystem.Application.Handlers.Authors
 {
-    internal class UpdateAuthorHandler : IRequestHandler<UpdateAuthorCommand, GeneralResponse<AuthorReadDto>>
+    internal class UpdateAuthorHandler : IRequestHandler<UpdateAuthorCommand, GeneralResponse<AuthorReadResponse>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public UpdateAuthorHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly ILogger<UpdateAuthorHandler> _logger;
+        public UpdateAuthorHandler(IUnitOfWork unitOfWork, IMapper mapper ,ILogger<UpdateAuthorHandler> logger)
         {
+            _logger = logger;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<GeneralResponse<AuthorReadDto>> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
+        public async Task<GeneralResponse<AuthorReadResponse>> 
+            Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                GeneralResponse<AuthorReadDto> response;
-                var updateAuthorDto = request.UpdatedAuthorDto;
+                GeneralResponse<AuthorReadResponse> response;
+                var updateAuthorDto = request;
                 if (await _unitOfWork.Authors.GetByIdAsync(updateAuthorDto.Id) == null)
                 {
+                    _logger.LogInformation("Attempted to update non-existent author with ID: {AuthorId}", updateAuthorDto.Id);
                     response =
-                        new GeneralResponse<AuthorReadDto>
+                        new GeneralResponse<AuthorReadResponse>
                         (null, false, "Author Not Found.", HttpStatusCode.BadRequest);
 
                 }
@@ -40,8 +45,9 @@ namespace LibraryManagementSystem.Application.Handlers.Authors
 
                 _unitOfWork.Authors.Update(updatedAuthor);
                 await _unitOfWork.Complete();
-                response = new GeneralResponse<AuthorReadDto>
-                    (_mapper.Map<AuthorReadDto>(updatedAuthor),
+                _logger.LogInformation("Author updated successfully with ID: {AuthorId}", updatedAuthor.Id);
+                response = new GeneralResponse<AuthorReadResponse>
+                    (_mapper.Map<AuthorReadResponse>(updatedAuthor),
                     true, "Author updated successfully.", HttpStatusCode.OK);
                 return response;
             }

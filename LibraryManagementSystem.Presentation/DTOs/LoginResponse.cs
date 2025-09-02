@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Application.DTOs
 {
-    public class  LoginRequestDto
+    public class LoginResponse
     {
-
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
-
+        public string Token { get; set; } = null!;
+        public DateTime Expiration { get; set; }
     }
 }

@@ -3,13 +3,16 @@ using LibraryManagementSystem.Application.DTOs;
 
 namespace LibraryManagementSystem.Application.Commands.Books
 {
-    public class BorrowBookCommand : IRequest<GeneralResponse<BookReadDto>>
+    public class BorrowBookCommand : IRequest<GeneralResponse<BookReadResponse>>
     {
-        public BorrowRequestDto RequestDto { get; set; }
+        
+        public int UserId { get; set; }
+        public int BookIsbn { get; set; }
 
-        public BorrowBookCommand(BorrowRequestDto requestDto)
+        public BorrowBookCommand(int UserId , int BookIsbn)
         {
-            RequestDto = requestDto;
+            this.BookIsbn = BookIsbn;
+            this.UserId = UserId;
         }
     }
 }

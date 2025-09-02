@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Application.DTOs
 {
-    public class UserBorrowingHistoryDto
+    public class UserBorrowingHistoryResponse
     {
         public String BookTitle { get; set; }
         public DateOnly BorrowDate { get; set; }

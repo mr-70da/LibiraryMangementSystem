@@ -13,60 +13,67 @@ using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 //done
-namespace LibraryManagementSystem.Application.Handlers.Authors
+namespace LibraryManagementSystem.Application.Handlers.Authentications
 {
     public class RegisterHandler :
-        IRequestHandler<RegisterCommand, GeneralResponse<LoginResponseDto>>
+        IRequestHandler<RegisterCommand, GeneralResponse<LoginResponse>>
     {
         private readonly IConfiguration _configuration;
         readonly IUnitOfWork _unitOfWork;
         readonly IMapper _mapper;
+        readonly ILogger<RegisterHandler> _logger;
         public RegisterHandler(IUnitOfWork unitOfWork,
-            IMapper mapper, IConfiguration configuration)
+            IMapper mapper, IConfiguration configuration , ILogger<RegisterHandler> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _configuration = configuration;
+            _logger = logger;
         }
-        public async Task<GeneralResponse<LoginResponseDto>> 
+        public async Task<GeneralResponse<LoginResponse>> 
             Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                GeneralResponse<LoginResponseDto> response;
-                var email = request.RegisterDto.Email.ToLower();
-                var newUser = _mapper.Map<User>(request.RegisterDto);
+                GeneralResponse<LoginResponse> response;
+                var email = request.Email.ToLower();
+                var newUser = _mapper.Map<User>(request);
                 newUser.Email = email;
                 var checkUser = await _unitOfWork.Users.GetByEmailAsync(email);
                 if (checkUser != null)
                 {
+                    _logger.LogWarning("Attempted to register with an existing email: {Email}", email);
                     response =
-                        new GeneralResponse<LoginResponseDto>
+                        new GeneralResponse<LoginResponse>
                         (null, false, "this email already exist.", HttpStatusCode.BadRequest);
                     throw new Exception("this email already exist.");
                 }
-                newUser.Password = BCrypt.Net.BCrypt.HashPassword(request.RegisterDto.Password);
+                newUser.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
                 newUser.RegistrationDate = DateOnly.FromDateTime(DateTime.Now);
 
                 await _unitOfWork.Users.AddAsync(newUser);
                 await _unitOfWork.Complete();
 
                 var token = await GenerateToken(newUser);
-                response = new GeneralResponse<LoginResponseDto>
-                    (new LoginResponseDto
+                response = new GeneralResponse<LoginResponse>
+                    (new LoginResponse
                     {
                         Token = token,
                         Expiration = DateTime.UtcNow.AddHours(1)
                     },
                     true, "Register successful.", HttpStatusCode.OK);
+                _logger.LogInformation("User registered successfully with email: {Email}", email);
 
                 return response;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred during registration for email: {Email}", request.Email);
                 throw new Exception(ex.Message);
+               
             }
         }
         private async Task<string> GenerateToken(User user)

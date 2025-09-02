@@ -3,7 +3,7 @@ using LibraryManagementSystem.Application.DTOs;
 
 namespace LibraryManagementSystem.Application.Commands.Books
 {
-    public class ReturnBookCommand : IRequest<GeneralResponse<BookReadDto>>
+    public class ReturnBookCommand : IRequest<GeneralResponse<BookReadResponse>>
     {
         public int TransactionId { get; set; }
 

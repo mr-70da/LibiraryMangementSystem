@@ -21,10 +21,10 @@ namespace LibraryManagementSystem.Controllers
         //Create new auther
         [HttpPost]
         
-        public async Task<IActionResult> Create([FromBody] AuthorCreateDto newAuthor)
+        public async Task<IActionResult> Create([FromBody] CreateAuthorCommand newAuthor)
         {
 
-            return Ok(await _mediator.Send(new CreateAuthorCommand(newAuthor)));
+            return Ok(await _mediator.Send(newAuthor));
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int authorId)
@@ -33,9 +33,9 @@ namespace LibraryManagementSystem.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(AuthorUpdateRequestDto requestDto)
+        public async Task<IActionResult> Update(UpdateAuthorCommand requestDto)
         {
-             return Ok(await _mediator.Send(new UpdateAuthorCommand(requestDto)));
+             return Ok(await _mediator.Send(requestDto));
         }
     }
 }

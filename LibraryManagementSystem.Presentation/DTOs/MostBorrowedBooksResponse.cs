@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Application.DTOs
 {
-    public class LoginResponseDto
+    public class MostBorrowedBooksResponse
     {
-        public string Token { get; set; } = null!;
-        public DateTime Expiration { get; set; }
+        public int BookId { get; set; }
+        public string Title { get; set; }
+        public int BorrowCount { get; set; }
     }
 }

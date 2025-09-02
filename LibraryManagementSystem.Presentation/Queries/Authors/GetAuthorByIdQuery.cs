@@ -8,7 +8,7 @@ using MediatR;
 //done
 namespace LibraryManagementSystem.Application.Queries.Authors
 {
-    internal class GetAuthorByIdQuery : IRequest<GeneralResponse<AuthorReadDto>>
+    internal class GetAuthorByIdQuery : IRequest<GeneralResponse<AuthorReadResponse>>
     {
         public int Id { get; }
         public GetAuthorByIdQuery(int id)

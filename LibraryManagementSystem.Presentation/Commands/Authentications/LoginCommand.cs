@@ -3,12 +3,16 @@ using MediatR;
 
 namespace LibraryManagementSystem.Application.Commands.Authentications
 {
-    public class LoginCommand : IRequest<GeneralResponse<LoginResponseDto>>
+    public class LoginCommand : IRequest<GeneralResponse<LoginResponse>>
     {
-        public LoginRequestDto LoginDto { get; }
-        public LoginCommand(LoginRequestDto loginDto)
+        
+        public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
+
+        public LoginCommand(String email , String password)
         {
-            LoginDto = loginDto;
+            Email = email;
+            Password = password;
         }
     }
 }

@@ -3,33 +3,37 @@ using LibraryManagementSystem.Application.DTOs;
 using LibraryManagementSystem.Application.Queries.Books;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using MediatR;
+using Microsoft.Extensions.Logging;
 //done
 namespace LibraryManagementSystem.Application.Handlers.Books
 {
     public class GetMostBorrowedBooksHandler : IRequestHandler<GetMostBorrowedBooksQuery,
-        GeneralResponse<List<MostBorrowedBooksDto>>>
+        GeneralResponse<List<MostBorrowedBooksResponse>>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<GetMostBorrowedBooksHandler> _logger;
 
-        public GetMostBorrowedBooksHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public GetMostBorrowedBooksHandler(IUnitOfWork unitOfWork, IMapper mapper ,
+            ILogger<GetMostBorrowedBooksHandler> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task<GeneralResponse<List<MostBorrowedBooksDto>>>
+        public async Task<GeneralResponse<List<MostBorrowedBooksResponse>>>
             Handle(GetMostBorrowedBooksQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                GeneralResponse<List<MostBorrowedBooksDto>> response;
+                GeneralResponse<List<MostBorrowedBooksResponse>> response;
                 var result = (from bh in await _unitOfWork.Borrowings.GetAllAsync()
                               join b in await _unitOfWork.Books.GetAllAsync()
                                   on bh.BookId equals b.Isbn
                               group bh by new { b.Isbn, b.Title } into g
                               orderby g.Count() descending
-                              select new MostBorrowedBooksDto
+                              select new MostBorrowedBooksResponse
                               {
                                   BookId = g.Key.Isbn,
                                   Title = g.Key.Title,
@@ -37,12 +41,14 @@ namespace LibraryManagementSystem.Application.Handlers.Books
                               })
                               .Take(request.ListSize)
                               .ToList();
-                response = new GeneralResponse<List<MostBorrowedBooksDto>>
+                _logger.LogInformation("Most borrowed books retrieved successfully.");
+                response = new GeneralResponse<List<MostBorrowedBooksResponse>>
                     (result, true, "Most borrowed books retrieved successfully", System.Net.HttpStatusCode.OK);
                 return response;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while retrieving most borrowed books.");
                 throw new Exception("An error occurred while retrieving most borrowed books: " + ex.Message);
             }
         }

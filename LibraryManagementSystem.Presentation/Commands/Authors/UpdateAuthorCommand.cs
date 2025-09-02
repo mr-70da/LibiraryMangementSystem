@@ -8,12 +8,16 @@ using MediatR;
 
 namespace LibraryManagementSystem.Application.Commands.Authors
 {
-    public class UpdateAuthorCommand : IRequest<GeneralResponse<AuthorReadDto>>
+    public class UpdateAuthorCommand : IRequest<GeneralResponse<AuthorReadResponse>>
     {
-        public AuthorUpdateRequestDto UpdatedAuthorDto { get; }
-        public UpdateAuthorCommand(AuthorUpdateRequestDto updatedAuthorDto)
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string? LastName { get; set; }
+        public UpdateAuthorCommand(int Id, String FirstName , String? LastName)
         {
-            UpdatedAuthorDto = updatedAuthorDto;
+             this.FirstName = FirstName;
+             this.LastName = LastName;
+             this.Id = Id;
         }
        
     }

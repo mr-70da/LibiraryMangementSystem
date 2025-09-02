@@ -22,8 +22,4 @@
     <ProjectReference Include="..\LibraryManagementSystem.Domain\LibraryManagementSystem.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Handlers\Authentications\" />
-  </ItemGroup>
-
 </Project>

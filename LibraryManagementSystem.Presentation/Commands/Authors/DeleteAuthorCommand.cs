@@ -8,7 +8,7 @@ using MediatR;
 
 namespace LibraryManagementSystem.Application.Commands.Authors
 {
-    public class DeleteAuthorCommand : IRequest<GeneralResponse<AuthorReadDto>>
+    public class DeleteAuthorCommand : IRequest<GeneralResponse<AuthorReadResponse>>
     {
         public int Id { get; }
         public DeleteAuthorCommand(int id)

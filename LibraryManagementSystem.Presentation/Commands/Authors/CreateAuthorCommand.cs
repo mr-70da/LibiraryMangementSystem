@@ -3,12 +3,14 @@ using MediatR;
 
 namespace LibraryManagementSystem.Application.Commands.Authors
 {
-    public class CreateAuthorCommand : IRequest<GeneralResponse<AuthorReadDto>>
+    public class CreateAuthorCommand : IRequest<GeneralResponse<AuthorReadResponse>>
     {
-        public AuthorCreateDto AuthorDto { get; set; }
-        public CreateAuthorCommand(AuthorCreateDto authorDto)
+        public string FirstName { get; set; }
+        public string? LastName { get; set; }
+        public CreateAuthorCommand(String FirstName, String LastName)
         {
-            AuthorDto = authorDto;
+            this.FirstName = FirstName;
+            this.LastName = LastName;
         }
         
     }

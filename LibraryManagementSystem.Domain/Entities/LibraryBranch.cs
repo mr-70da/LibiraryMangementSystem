@@ -10,5 +10,5 @@ public partial class LibraryBranch
 
     public string? ContactNumber { get; set; }
 
-    public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+    public virtual ICollection<Book> Books { get; set; } 
 }
