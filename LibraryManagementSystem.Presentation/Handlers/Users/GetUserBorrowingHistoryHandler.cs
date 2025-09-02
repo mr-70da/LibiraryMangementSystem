@@ -51,7 +51,7 @@ namespace LibraryManagementSystem.Application.Handlers.Users
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving borrowing history for user with ID: {UserId}", request.UserId);
+               
                 throw new Exception(ex.Message);
                
             }

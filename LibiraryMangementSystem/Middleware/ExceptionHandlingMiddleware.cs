@@ -1,5 +1,6 @@
-﻿using System.Net;
-using LibraryManagementSystem.Application.DTOs;
+﻿using LibraryManagementSystem.Application.DTOs;
+using System.Net;
+
 
 public class ExceptionHandlingMiddleware
 {
@@ -26,19 +27,16 @@ public class ExceptionHandlingMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        _logger.LogError(exception, "An unexpected error occurred.");
-
-
-
-        ExceptionResponse response = exception switch
+        _logger.LogError(exception.Message);
+        GeneralResponse<Exception> response =  exception switch
         {
-            ArgumentNullException ex => new ExceptionResponse(HttpStatusCode.Forbidden, ex.Message),
-            KeyNotFoundException ex => new ExceptionResponse(HttpStatusCode.NotFound, ex.Message),
-            Exception ex => new ExceptionResponse(HttpStatusCode.InternalServerError, ex.Message)
+            ArgumentNullException ex => new GeneralResponse<Exception>(null, false, ex.Message , HttpStatusCode.Forbidden),
+            KeyNotFoundException ex => new GeneralResponse<Exception>(null, false, ex.Message, HttpStatusCode.NotFound),
+            Exception ex => new GeneralResponse<Exception>(null, false, ex.Message, HttpStatusCode.ServiceUnavailable)
         };
 
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)response.StatusCode;
+        context.Response.StatusCode = (int)response.statusCode;
         await context.Response.WriteAsJsonAsync(response);
     }
 }

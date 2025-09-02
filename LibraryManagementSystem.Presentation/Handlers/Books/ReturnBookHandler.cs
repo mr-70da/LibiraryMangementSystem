@@ -54,7 +54,7 @@ namespace LibraryManagementSystem.Application.Handlers.Books
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while returning the book for transaction ID: {TransactionId}", request.TransactionId);
+               
                 throw new Exception("An error occurred while returning the book: " + ex.Message);
             }
         }

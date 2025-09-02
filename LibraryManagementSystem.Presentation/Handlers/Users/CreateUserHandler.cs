@@ -40,7 +40,7 @@ namespace LibraryManagementSystem.Application.Handlers.Users
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while creating the user.");
+               
                 throw new Exception(ex.Message);
 
             }

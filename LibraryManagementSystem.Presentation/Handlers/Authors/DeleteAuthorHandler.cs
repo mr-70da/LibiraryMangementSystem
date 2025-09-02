@@ -19,26 +19,33 @@ namespace LibraryManagementSystem.Application.Handlers.Authors
             _mapper = mapper;
             _logger = logger;
         }
-        public async Task<GeneralResponse<AuthorReadResponse>> 
+        public async Task<GeneralResponse<AuthorReadResponse>>
             Handle(DeleteAuthorCommand request, CancellationToken cancellationToken)
         {
 
-            GeneralResponse<AuthorReadResponse> response;
-            var author = await _unitOfWork.Authors.GetByIdAsync(request.Id);
-            if (author == null)
+            try
             {
-                _logger.LogWarning("Attempted to delete non-existent author with ID: {AuthorId}", request.Id);
-                response = new GeneralResponse<AuthorReadResponse>
-                   (null, false, "Author not found.", System.Net.HttpStatusCode.NotFound);
+                GeneralResponse<AuthorReadResponse> response;
+                var author = await _unitOfWork.Authors.GetByIdAsync(request.Id);
+                if (author == null)
+                {
+                    _logger.LogWarning("Attempted to delete non-existent author with ID: {AuthorId}", request.Id);
+                    response = new GeneralResponse<AuthorReadResponse>
+                       (null, false, "Author not found.", System.Net.HttpStatusCode.NotFound);
 
+                }
+
+                _unitOfWork.Authors.Remove(author);
+                await _unitOfWork.Complete();
+                _logger.LogInformation("Author deleted successfully with ID: {AuthorId}", request.Id);
+                return response = new GeneralResponse<AuthorReadResponse>
+                       (_mapper.Map<AuthorReadResponse>(author),
+                       true, "Author deleted successfully.", System.Net.HttpStatusCode.OK);
             }
-
-            _unitOfWork.Authors.Remove(author);
-            await _unitOfWork.Complete();
-            _logger.LogInformation("Author deleted successfully with ID: {AuthorId}", request.Id);
-            return response = new GeneralResponse<AuthorReadResponse>
-                   (_mapper.Map<AuthorReadResponse>(author),
-                   true, "Author deleted successfully.", System.Net.HttpStatusCode.OK);
+            catch (Exception ex)
+            {
+                throw new Exception("Error occurred while creating token." + ex.Message);
+            }
         }
     }
 }

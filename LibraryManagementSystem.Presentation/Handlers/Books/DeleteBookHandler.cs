@@ -43,8 +43,7 @@ namespace LibraryManagementSystem.Application.Handlers.Books
             }
             catch (Exception ex)
             {
-                _logger.LogWarning("An error occurred while deleting the book with ISBN: {BookIsbn}. Error: {ErrorMessage}",
-                    request.Id, ex.Message);
+                
                 throw new Exception("An error occurred while deleting the book: " + ex.Message);
             }
         }

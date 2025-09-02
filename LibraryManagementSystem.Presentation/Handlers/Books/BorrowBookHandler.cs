@@ -78,9 +78,9 @@ namespace LibraryManagementSystem.Application.Handlers.Books
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while borrowing the book with ISBN: {BookIsbn} by User ID: {UserId}.",
-                    request.BookIsbn, request.UserId);
-                throw new Exception("An error occurred while borrowing the book: " + ex.Message);
+                
+                throw new Exception(("An error occurred while borrowing the book with ISBN: {BookIsbn} by User ID: {UserId}.",
+                    request.BookIsbn, request.UserId) +"An error occurred while borrowing the book: " + ex.Message);
             }
         }
 

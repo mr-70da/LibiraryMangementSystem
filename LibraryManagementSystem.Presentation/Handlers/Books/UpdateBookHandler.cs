@@ -41,7 +41,7 @@ namespace LibraryManagementSystem.Application.Handlers.Books
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while updating the book with ISBN: {BookIsbn}", request.Isbn);
+               
                 throw new Exception("An error occurred while updating the book: " + ex.Message);
             }
         }

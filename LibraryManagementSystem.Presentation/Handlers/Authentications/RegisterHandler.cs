@@ -65,39 +65,46 @@ namespace LibraryManagementSystem.Application.Handlers.Authentications
                         Expiration = DateTime.UtcNow.AddHours(1)
                     },
                     true, "Register successful.", HttpStatusCode.OK);
-                _logger.LogInformation("User registered successfully with email: {Email}", email);
+                _logger.LogInformation("User registered successfully with email: ", email);
 
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred during registration for email: {Email}", request.Email);
-                throw new Exception(ex.Message);
+                
+                throw new Exception(("An error occurred during registration for email: ", request.Email) 
+                    + ex.Message);
                
             }
         }
         private async Task<string> GenerateToken(User user)
         {
-            var role = await _unitOfWork.Users.GetRoleName(user.RoleId);
-
-            var claims = new[]
+            try
             {
+                var role = await _unitOfWork.Users.GetRoleName(user.RoleId);
+
+                var claims = new[]
+                {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(ClaimTypes.Role, role)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:Issuer"],
-                audience: _configuration["JWT:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: creds);
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWT:Issuer"],
+                    audience: _configuration["JWT:Audience"],
+                    claims: claims,
+                    expires: DateTime.UtcNow.AddHours(1),
+                    signingCredentials: creds);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception ex) {
+                throw new Exception("Ocurrs"+ex.Message);
+            }
         }
     }
 }

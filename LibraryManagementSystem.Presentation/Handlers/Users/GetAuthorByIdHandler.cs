@@ -48,7 +48,7 @@ namespace LibraryManagementSystem.Application.Handlers.Users
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving the author with ID: {AuthorId}", request.Id);
+               
                 throw new Exception("An error occurred while retrieving the author.", ex);
             }
         }

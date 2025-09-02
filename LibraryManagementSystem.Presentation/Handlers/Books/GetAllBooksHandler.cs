@@ -25,26 +25,33 @@ namespace LibraryManagementSystem.Application.Handlers.Books
         public async Task<GeneralResponse<BooksFilterResponse>> 
             Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
         {
-            var query = await _unitOfWork.Books.GetFilteredBooksAsync(
+            try
+            {
+                var query = await _unitOfWork.Books.GetFilteredBooksAsync(
                 request.AuthorId, request.BookName, request.BranchId);
 
-            int totalBooks = query.Count();
+                int totalBooks = query.Count();
 
-            var paginatedBooks = query
-                .Skip(request.Skip)
-                .Take(request.Take)
-                .ToList();
+                var paginatedBooks = query
+                    .Skip(request.Skip)
+                    .Take(request.Take)
+                    .ToList();
 
-            var bookDto = _mapper.Map<List<BookReadResponse>>(paginatedBooks);
-            _logger.LogInformation("Retrieved {Count} books with filters - AuthorId: {AuthorId}, BookName: {BookName}, BranchId: {BranchId}",
-                bookDto.Count, request.AuthorId, request.BookName, request.BranchId);
-            return new GeneralResponse<BooksFilterResponse>(
-                new BooksFilterResponse
+                var bookDto = _mapper.Map<List<BookReadResponse>>(paginatedBooks);
+                _logger.LogInformation("Retrieved {Count} books with filters - AuthorId: {AuthorId}, BookName: {BookName}, BranchId: {BranchId}",
+                    bookDto.Count, request.AuthorId, request.BookName, request.BranchId);
+                return new GeneralResponse<BooksFilterResponse>(
+                    new BooksFilterResponse
+                    {
+                        TotalCount = totalBooks,
+                        Books = bookDto
+                    },
+                    true, "Books retrieved successfully", HttpStatusCode.OK);
+            }catch (Exception ex)
+            
                 {
-                    TotalCount = totalBooks,
-                    Books = bookDto
-                },
-                true, "Books retrieved successfully", HttpStatusCode.OK);
+                throw new Exception(ex.Message);
+                }
         }
     }
 }

@@ -41,7 +41,7 @@ namespace LibraryManagementSystem.Application.Handlers.Authors
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while creating the author.");
+               
                 throw new Exception("An error occurred while creating the author.", ex);
             }
         }

@@ -46,8 +46,8 @@ namespace LibraryManagementSystem.Application.Handlers.Authors
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving users.");
-                throw new Exception(ex.Message);
+                
+                throw new Exception("An error occurred while retrieving users."+ex.Message);
             }
         }
     

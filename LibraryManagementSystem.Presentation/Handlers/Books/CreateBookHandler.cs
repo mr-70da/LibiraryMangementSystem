@@ -24,21 +24,28 @@ namespace LibraryManagementSystem.Application.Handlers.Books
 
         public async Task<GeneralResponse<BookReadResponse>> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
-            var newBook = _mapper.Map<Book>(request);
-            var author = await _unitOfWork.Authors.GetByIdAsync(request.AuthorId);
-
-            if (author == null)
+            try
             {
-                _logger.LogWarning("Attempted to create a book with non-existent author ID: {AuthorId}", request.AuthorId);
-                return new GeneralResponse<BookReadResponse>(
-                    null, false, "Author not found", HttpStatusCode.BadRequest);
-            }
+                var newBook = _mapper.Map<Book>(request);
+                var author = await _unitOfWork.Authors.GetByIdAsync(request.AuthorId);
 
-            await _unitOfWork.Books.AddAsync(newBook);
-            await _unitOfWork.Complete();
-            _logger.LogInformation("Book created successfully with ISBN: {BookIsbn}", newBook.Isbn);
-            return new GeneralResponse<BookReadResponse>(
-                _mapper.Map<BookReadResponse>(newBook), true, "Book created successfully", HttpStatusCode.Created);
+                if (author == null)
+                {
+                    _logger.LogWarning("Attempted to create a book with non-existent author ID: {AuthorId}", request.AuthorId);
+                    return new GeneralResponse<BookReadResponse>(
+                        null, false, "Author not found", HttpStatusCode.BadRequest);
+                }
+
+                await _unitOfWork.Books.AddAsync(newBook);
+                await _unitOfWork.Complete();
+                _logger.LogInformation("Book created successfully with ISBN: {BookIsbn}", newBook.Isbn);
+                return new GeneralResponse<BookReadResponse>(
+                    _mapper.Map<BookReadResponse>(newBook), true, "Book created successfully", HttpStatusCode.Created);
+            }
+            catch (Exception ex) {
+                throw new Exception("Error while creating book." + ex.Message);
+            
+            }
         }
     }
 }

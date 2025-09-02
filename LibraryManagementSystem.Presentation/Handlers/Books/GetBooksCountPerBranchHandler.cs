@@ -42,7 +42,7 @@ namespace LibraryManagementSystem.Application.Handlers.Books
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving books count per branch.");
+              
                 throw new Exception("An error occurred while retrieving books count per branch: " + ex.Message);
             }
         }
