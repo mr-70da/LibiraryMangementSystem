@@ -49,7 +49,7 @@ namespace LibraryManagementSystem.Application.Handlers.Users
             catch (Exception ex)
             {
                
-                throw new Exception("An error occurred while retrieving the author.", ex);
+                throw new Exception(ex.Message);
             }
         }
     }

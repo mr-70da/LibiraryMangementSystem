@@ -84,7 +84,7 @@ namespace LibraryManagementSystem.Application.Handlers.Authentications
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occurred while creating token."+ ex.Message);
+                throw new Exception(ex.Message);
                 
             }
         }

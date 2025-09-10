@@ -72,8 +72,7 @@ namespace LibraryManagementSystem.Application.Handlers.Authentications
             catch (Exception ex)
             {
                 
-                throw new Exception(("An error occurred during registration for email: ", request.Email) 
-                    + ex.Message);
+                throw new Exception(ex.Message);
                
             }
         }
@@ -103,7 +102,7 @@ namespace LibraryManagementSystem.Application.Handlers.Authentications
                 return new JwtSecurityTokenHandler().WriteToken(token);
             }
             catch (Exception ex) {
-                throw new Exception("Ocurrs"+ex.Message);
+                throw new Exception(ex.Message);
             }
         }
     }

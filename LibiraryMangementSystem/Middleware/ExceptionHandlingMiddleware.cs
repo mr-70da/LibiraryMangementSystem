@@ -1,4 +1,5 @@
 ﻿using LibraryManagementSystem.Application.DTOs;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 
 
@@ -27,7 +28,7 @@ public class ExceptionHandlingMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        _logger.LogError(exception.Message);
+        _logger.LogError("error ::", exception.Message);
         GeneralResponse<Exception> response =  exception switch
         {
             ArgumentNullException ex => new GeneralResponse<Exception>(null, false, ex.Message , HttpStatusCode.Forbidden),
@@ -36,7 +37,7 @@ public class ExceptionHandlingMiddleware
         };
 
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)response.statusCode;
+        context.Response.StatusCode = (int)HttpStatusCode.OK;
         await context.Response.WriteAsJsonAsync(response);
     }
 }

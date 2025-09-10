@@ -43,7 +43,7 @@ namespace LibraryManagementSystem.Application.Handlers.Books
                     _mapper.Map<BookReadResponse>(newBook), true, "Book created successfully", HttpStatusCode.Created);
             }
             catch (Exception ex) {
-                throw new Exception("Error while creating book." + ex.Message);
+                throw new Exception(ex.Message);
             
             }
         }

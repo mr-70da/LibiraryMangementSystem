@@ -47,7 +47,7 @@ namespace LibraryManagementSystem.Application.Handlers.Authors
             catch (Exception ex)
             {
                 
-                throw new Exception("An error occurred while retrieving users."+ex.Message);
+                throw new Exception(ex.Message);
             }
         }
     
