@@ -1,5 +1,6 @@
 ﻿
 
+using LibraryManagementSystem.Application.Service;
 using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Infrastructure.Data;
@@ -11,7 +12,7 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
 {
     public class BookRepository : GenericRepository<Book>, IBookRepository
     {
-        public BookRepository(LibraryDbContext context) : base(context)
+        public BookRepository(LibraryDbContext context, ICacheService cache) : base(context, cache)
         {
         }
         

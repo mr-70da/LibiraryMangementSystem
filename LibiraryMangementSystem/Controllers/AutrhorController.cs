@@ -1,5 +1,6 @@
 ﻿using LibraryManagementSystem.Application.Commands.Authors;
 using LibraryManagementSystem.Application.DTOs;
+using LibraryManagementSystem.Application.Queries.Authors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +18,7 @@ namespace LibraryManagementSystem.Controllers
         {
             _mediator = mediator;
         }
-
-        //Create new auther
+        
         [HttpPost]
         
         public async Task<IActionResult> Create([FromBody] CreateAuthorCommand newAuthor)

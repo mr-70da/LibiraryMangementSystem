@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Domain.Entities;
+﻿using LibraryManagementSystem.Application.Service;
+using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Infrastructure.Data;
 
@@ -8,7 +9,7 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        public UserRepository(LibraryDbContext context) : base(context)
+        public UserRepository(LibraryDbContext context, ICacheService cache) : base(context, cache)
         {
         }
 

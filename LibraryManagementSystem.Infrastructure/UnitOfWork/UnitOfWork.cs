@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Domain.Entities;
+﻿using LibraryManagementSystem.Application.Service;
+using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Domain.UnitOfWork;
 using LibraryManagementSystem.Infrastructure.Data;
@@ -10,13 +11,20 @@ namespace LibraryManagementSystem.Infrastructure.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly LibraryDbContext _context;
-        public UnitOfWork(LibraryDbContext context , IBookRepository bookRepository,
+        private readonly ICacheService _cache;
+
+
+        public UnitOfWork(LibraryDbContext context,
+            IBookRepository bookRepository,
             IUserRepository userRepository,
             IAuthorRepository authorRepository,
             IBorrowingRepository borrowingRepository,
-            IBranchRepository branchRepository)
+            IBranchRepository branchRepository,
+            ICacheService cache)
         {
             _context = context;
+            _cache = cache;
+
             Books = bookRepository;
             Authors = authorRepository;
             Borrowings = borrowingRepository;

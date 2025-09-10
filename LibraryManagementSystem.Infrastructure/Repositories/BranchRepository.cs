@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Domain.Entities;
+﻿using LibraryManagementSystem.Application.Service;
+using LibraryManagementSystem.Domain.Entities;
 using LibraryManagementSystem.Domain.Interfaces.Repositories;
 using LibraryManagementSystem.Infrastructure.Data;
 using System;
@@ -11,7 +12,7 @@ namespace LibraryManagementSystem.Infrastructure.Repositories
 {
     public class BranchRepository: GenericRepository<LibraryBranch>, IBranchRepository
     {
-        public BranchRepository(LibraryDbContext context) : base(context)
+        public BranchRepository(LibraryDbContext context, ICacheService cache) : base(context, cache)
         {
 
         }

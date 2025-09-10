@@ -9,7 +9,7 @@ namespace LibraryManagementSystem.Domain.Interfaces.Repositories
         //update
         void Update(TEntity entity);
         //read
-        Task <TEntity> GetByIdAsync(object id);
+        Task <TEntity?> GetByIdAsync(object id);
         Task<IEnumerable<TEntity>> GetAllAsync();
 
         //delete
