@@ -11,7 +11,7 @@ using LibraryManagementSystem.Domain.UnitOfWork;
 using MediatR;
 using Microsoft.Extensions.Logging;
 //done
-namespace LibraryManagementSystem.Application.Handlers.Users
+namespace LibraryManagementSystem.Application.Handlers.Authors
 {
     internal class GetAuthorByIdHandler : IRequestHandler<GetAuthorByIdQuery, GeneralResponse<AuthorReadResponse>>
 

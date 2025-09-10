@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Microsoft.Extensions.Logging;
 //done
-namespace LibraryManagementSystem.Application.Handlers.Authors
+namespace LibraryManagementSystem.Application.Handlers.Users
 {
     public class GetAllUsersHandler : IRequestHandler<GetAllUsersQuery, GeneralResponse<List<UserReadResponse>>>
     {

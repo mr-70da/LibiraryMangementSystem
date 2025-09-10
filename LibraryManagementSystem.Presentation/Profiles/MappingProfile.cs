@@ -65,6 +65,8 @@ namespace LibraryManagementSystem.Application.Profiles
             CreateMap<User,LoginResponse>().ReverseMap();
             CreateMap<RegisterCommand, User>().ReverseMap();
             CreateMap<User, CreateUserCommand>().ReverseMap();
+            CreateMap<User, UserReadResponse>().ForMember(dest => dest.FullName,
+                op=>op.MapFrom(src => src.FirstName+ " "+src.LastName)).ReverseMap();
             CreateMap<User, GetUserBorrowingHistoryQuery>().ReverseMap();
             
 
